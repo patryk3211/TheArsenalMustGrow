@@ -10,6 +10,7 @@ import net.minecraft.world.item.Items;
 import org.patryk3211.tamg.Tamg;
 import org.patryk3211.tamg.collections.TamgItems;
 
+@SuppressWarnings("unused")
 public class SequencedAssemblyRecipes extends SequencedAssemblyRecipeGen {
     GeneratedRecipe
         PISTOL = create("pistol", b -> b

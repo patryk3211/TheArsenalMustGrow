@@ -81,12 +81,6 @@ public class BulletEntity extends Projectile {
             return;
         }
 
-        var world = level();
-        var r = world.random;
-        for(int i = 0; i < 4; ++i) {
-            world.addParticle(ParticleTypes.ELECTRIC_SPARK, x, y, z, r.nextFloat() - 0.5f, r.nextFloat() - 0.5f, r.nextFloat() - 0.5f);
-        }
-
         setDeltaMovement(getDeltaMovement().add(0, -0.05, 0));
         setPos(x, y, z);
     }

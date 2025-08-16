@@ -14,7 +14,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.patryk3211.tamg.collections.TamgEntities;
 import org.patryk3211.tamg.collections.TamgItems;
 import org.patryk3211.tamg.data.CuttingRecipes;
-import org.patryk3211.tamg.data.PressingRecipes;
+import org.patryk3211.tamg.data.CompactingRecipes;
 import org.patryk3211.tamg.data.SequencedAssemblyRecipes;
 import org.slf4j.Logger;
 
@@ -60,6 +60,6 @@ public class Tamg  {
 
         generator.addProvider(true, new SequencedAssemblyRecipes(pack));
         generator.addProvider(true, new CuttingRecipes(pack));
-        generator.addProvider(true, new PressingRecipes(pack));
+        generator.addProvider(true, new CompactingRecipes(pack));
     }
 }

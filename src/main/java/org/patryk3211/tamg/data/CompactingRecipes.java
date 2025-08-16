@@ -8,7 +8,8 @@ import net.minecraft.data.PackOutput;
 import org.patryk3211.tamg.Tamg;
 import org.patryk3211.tamg.collections.TamgItems;
 
-public class PressingRecipes extends ProcessingRecipeGen {
+@SuppressWarnings("unused")
+public class CompactingRecipes extends ProcessingRecipeGen {
     GeneratedRecipe
 
     CARBON_FIBRE = create("carbon_fibre", b -> b
@@ -22,12 +23,12 @@ public class PressingRecipes extends ProcessingRecipeGen {
             .output(TamgItems.CARBON_FIBRE))
     ;
 
-    public PressingRecipes(PackOutput generator) {
+    public CompactingRecipes(PackOutput generator) {
         super(generator, Tamg.MOD_ID);
     }
 
     @Override
     protected IRecipeTypeInfo getRecipeType() {
-        return AllRecipeTypes.PRESSING;
+        return AllRecipeTypes.COMPACTING;
     }
 }

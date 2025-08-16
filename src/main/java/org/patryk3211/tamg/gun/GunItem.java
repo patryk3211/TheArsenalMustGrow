@@ -17,6 +17,7 @@ package org.patryk3211.tamg.gun;
 
 import com.simibubi.create.content.equipment.zapper.ShootableGadgetItemMethods;
 import com.simibubi.create.foundation.item.CustomArmPoseItem;
+import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 import net.createmod.catnip.theme.Color;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -28,6 +29,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -36,9 +38,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import org.patryk3211.tamg.Lang;
@@ -47,6 +53,7 @@ import org.patryk3211.tamg.TamgClient;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -65,6 +72,12 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
 
     public GunItem(Properties settings) {
         super(settings);
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+        consumer.accept(SimpleCustomRenderer.create(this, new GunItemRenderer()));
     }
 
     @Override
@@ -126,8 +139,19 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+        super.inventoryTick(stack, level, entity, slotId, isSelected);
+        var current = getHeatAmount(stack);
+        if(current <= 0)
+            return;
+        stack.getOrCreateTag().putFloat("Heat", Math.max(current - heatDissipation, 0));
+    }
+
+    @Override
+    public InteractionResult useOn(UseOnContext context) {
+        if(context.getPlayer() == null)
+            return InteractionResult.FAIL;
+        return use(context.getLevel(), context.getPlayer(), context.getHand()).getResult();
     }
 
     @Override
@@ -137,6 +161,11 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
             TamgClient.GUN_RENDER_HANDLER.dontAnimateItem(hand);
             return InteractionResultHolder.success(stack);
         }
+
+        var projectile = user.getProjectile(stack);
+        if(projectile.isEmpty())
+            return InteractionResultHolder.fail(stack);
+        projectile.shrink(1);
 
         var barrelPos = ShootableGadgetItemMethods.getGunBarrelVec(user, hand == InteractionHand.MAIN_HAND,
                 new Vec3(.25f, -0.15f, 1.0f));
@@ -148,9 +177,9 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
                 .normalize()
                 .scale(4);
 
-        var projectile = BulletEntity.create(world, barrelPos, motion, (float) lookVec.y, (float) lookVec.x);
-        projectile.setOwner(user);
-        world.addFreshEntity(projectile);
+        var projectileEntity = BulletEntity.create(world, barrelPos, motion, (float) lookVec.y, (float) lookVec.x);
+        projectileEntity.setOwner(user);
+        world.addFreshEntity(projectileEntity);
 
         if(applyHeat(stack)) {
             // Overheated

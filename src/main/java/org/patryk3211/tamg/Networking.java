@@ -21,7 +21,6 @@ public class Networking {
 
     private static SimpleChannel channel;
 
-
     private static <T extends SimplePacketBase> void simpleHandler(T packet, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
         if (packet.handle(context)) {
@@ -33,7 +32,8 @@ public class Networking {
         channel.messageBuilder(clazz, packetIndex++, direction)
                 .encoder(SimplePacketBase::write)
                 .decoder(decoder)
-                .consumerNetworkThread((BiConsumer<T, Supplier<NetworkEvent.Context>>) Networking::simpleHandler);
+                .consumerNetworkThread((BiConsumer<T, Supplier<NetworkEvent.Context>>) Networking::simpleHandler)
+                .add();
     }
 
     public static void init() {

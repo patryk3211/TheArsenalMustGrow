@@ -24,7 +24,7 @@ public class TamgItems {
     public static final ItemEntry<Item> CARBON_FIBRE = ingredient("carbon_fibre");
 
     public static final ItemEntry<GunItem> PISTOL = REGISTRATE.item("pistol", GunItem::new)
-            .transform(GunProperties.setDamage(4))
+            .transform(GunProperties.setProperties(4, TamgItemTags.PISTOL_BULLETS.tag))
             .model((ctx, prov) -> {})
             .register();
 

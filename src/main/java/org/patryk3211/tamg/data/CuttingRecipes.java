@@ -7,6 +7,7 @@ import net.minecraft.data.PackOutput;
 import org.patryk3211.tamg.Tamg;
 import org.patryk3211.tamg.collections.TamgItems;
 
+@SuppressWarnings("unused")
 public class CuttingRecipes extends ProcessingRecipeGen {
     GeneratedRecipe
 
