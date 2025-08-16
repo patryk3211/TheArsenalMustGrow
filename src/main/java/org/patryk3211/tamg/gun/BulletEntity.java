@@ -32,6 +32,7 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.*;
+import org.patryk3211.tamg.collections.TamgEntities;
 
 public class BulletEntity extends Projectile {
     public BulletEntity(EntityType<? extends Projectile> type, Level world) {
@@ -39,14 +40,13 @@ public class BulletEntity extends Projectile {
     }
 
     public static BulletEntity create(Level world, Vec3 position, Vec3 velocity, float yaw, float pitch) {
-        return null;
-//        var entity = new ZapProjectileEntity(ModdedEntities.ZAP_PROJECTILE.get(), world);
-//        entity.setPosRaw(position.x, position.y, position.z);
-//        entity.setDeltaMovement(velocity);
-//        ProjectileUtil.rotateTowardsMovement(entity, 1.0f);
-//        entity.setOldPosAndRot();
-//        entity.reapplyPosition();
-//        return entity;
+        var entity = new BulletEntity(TamgEntities.BULLET.get(), world);
+        entity.setPosRaw(position.x, position.y, position.z);
+        entity.setDeltaMovement(velocity);
+        ProjectileUtil.rotateTowardsMovement(entity, 1.0f);
+        entity.setOldPosAndRot();
+        entity.reapplyPosition();
+        return entity;
     }
 
     @Override
@@ -87,11 +87,11 @@ public class BulletEntity extends Projectile {
             world.addParticle(ParticleTypes.ELECTRIC_SPARK, x, y, z, r.nextFloat() - 0.5f, r.nextFloat() - 0.5f, r.nextFloat() - 0.5f);
         }
 
-//        setVelocity(getVelocity().add(0, -0.05, 0));
+        setDeltaMovement(getDeltaMovement().add(0, -0.05, 0));
         setPos(x, y, z);
     }
 
-    private DamageSource causeZapDamage() {
+    private DamageSource causeDamage() {
         Registry<DamageType> registry = level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
         return null;
 //        return new DamageSource(registry.getHolder(ModdedDamageTypes.ZAP).get(), this, getOwner());
@@ -120,7 +120,7 @@ public class BulletEntity extends Projectile {
 
 //        var effectBB = new AABB(target.blockPosition()).inflate(2);
         var world = level();
-        var source = causeZapDamage();
+        var source = causeDamage();
 //        var affectedEntities = world.getEntities(target, effectBB, e -> e instanceof LivingEntity && !e.isInvulnerableTo(source));
 //
         var onServer = !world.isClientSide;

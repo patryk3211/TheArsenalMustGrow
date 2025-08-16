@@ -1,0 +1,107 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "tamg:medium_casing"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "chance": 100.0,
+      "item": "tamg:medium_bullet"
+    },
+    {
+      "chance": 6.0,
+      "item": "create:brass_sheet"
+    },
+    {
+      "chance": 3.0,
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "chance": 3.0,
+      "item": "create:copper_nugget"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_medium_bullet"
+        },
+        {
+          "item": "minecraft:gunpowder"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_medium_bullet"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_medium_bullet"
+        },
+        {
+          "item": "minecraft:gunpowder"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_medium_bullet"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_medium_bullet"
+        },
+        {
+          "item": "tfmg:lead_nugget"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_medium_bullet"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_medium_bullet"
+        },
+        {
+          "item": "create:copper_nugget"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_medium_bullet"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_medium_bullet"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_medium_bullet"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "tamg:incomplete_medium_bullet"
+  }
+}

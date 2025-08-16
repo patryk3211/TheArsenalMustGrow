@@ -11,7 +11,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.patryk3211.tamg.collections.ModdedItems;
+import org.patryk3211.tamg.collections.TamgEntities;
+import org.patryk3211.tamg.collections.TamgItems;
+import org.patryk3211.tamg.data.CuttingRecipes;
+import org.patryk3211.tamg.data.PressingRecipes;
 import org.patryk3211.tamg.data.SequencedAssemblyRecipes;
 import org.slf4j.Logger;
 
@@ -34,7 +37,8 @@ public class Tamg  {
                 .build();
         REGISTRATE.registerEventListeners(modEventBus);
 
-        ModdedItems.register();
+        TamgItems.register();
+        TamgEntities.register();
 
         Networking.init();
 
@@ -45,11 +49,17 @@ public class Tamg  {
         return ResourceLocation.tryBuild(MOD_ID, path);
     }
 
+    public static ResourceLocation texture(String path) {
+        return asResource("textures/" + path + ".png");
+    }
+
     @SubscribeEvent
-    public void gatherData(final GatherDataEvent event) {
+    public static void gatherData(final GatherDataEvent event) {
         var generator = event.getGenerator();
         var pack = generator.getPackOutput();
 
         generator.addProvider(true, new SequencedAssemblyRecipes(pack));
+        generator.addProvider(true, new CuttingRecipes(pack));
+        generator.addProvider(true, new PressingRecipes(pack));
     }
 }

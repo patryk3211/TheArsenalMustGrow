@@ -1,0 +1,95 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create:potato_cannon"
+  },
+  "loops": 2,
+  "results": [
+    {
+      "chance": 100.0,
+      "item": "tamg:pistol"
+    },
+    {
+      "chance": 5.0,
+      "item": "tfmg:steel_mechanism"
+    },
+    {
+      "chance": 3.0,
+      "item": "tfmg:steel_ingot"
+    },
+    {
+      "chance": 2.0,
+      "item": "tfmg:screw"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_pistol"
+        },
+        {
+          "item": "tfmg:steel_mechanism"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_pistol"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_pistol"
+        },
+        {
+          "item": "tamg:carbon_fibre"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_pistol"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_pistol"
+        },
+        {
+          "item": "tfmg:screw"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_pistol"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_pistol"
+        },
+        {
+          "item": "tfmg:screwdriver"
+        }
+      ],
+      "keepHeldItem": true,
+      "results": [
+        {
+          "item": "tamg:incomplete_pistol"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "tamg:incomplete_pistol"
+  }
+}

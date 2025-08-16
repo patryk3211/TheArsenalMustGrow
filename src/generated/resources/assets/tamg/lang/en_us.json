@@ -1,0 +1,19 @@
+{
+  "entity.tamg.bullet": "Bullet",
+  "item.tamg.carbon_fibre": "Carbon Fibre",
+  "item.tamg.heavy_bullet": "Heavy Bullet",
+  "item.tamg.heavy_casing": "Heavy Casing",
+  "item.tamg.incomplete_heavy_bullet": "Incomplete Heavy Bullet",
+  "item.tamg.incomplete_medium_bullet": "Incomplete Medium Bullet",
+  "item.tamg.incomplete_pistol": "Incomplete Pistol",
+  "item.tamg.incomplete_shotgun_slug": "Incomplete Shotgun Slug",
+  "item.tamg.incomplete_small_bullet": "Incomplete Small Bullet",
+  "item.tamg.medium_bullet": "Medium Bullet",
+  "item.tamg.medium_casing": "Medium Casing",
+  "item.tamg.pistol": "Pistol",
+  "item.tamg.shotgun_slug": "Shotgun Slug",
+  "item.tamg.slug_casing": "Slug Casing",
+  "item.tamg.small_bullet": "Small Bullet",
+  "item.tamg.small_casing": "Small Casing",
+  "itemGroup.tamg.the_arsenal_must_grow": "The Arsenal Must Grow"
+}

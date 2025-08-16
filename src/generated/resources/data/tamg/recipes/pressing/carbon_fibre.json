@@ -1,0 +1,29 @@
+{
+  "type": "create:pressing",
+  "heatRequirement": "superheated",
+  "ingredients": [
+    {
+      "tag": "minecraft:coals"
+    },
+    {
+      "tag": "minecraft:coals"
+    },
+    {
+      "tag": "minecraft:coals"
+    },
+    {
+      "tag": "minecraft:coals"
+    },
+    {
+      "tag": "minecraft:coals"
+    },
+    {
+      "item": "create:pulp"
+    }
+  ],
+  "results": [
+    {
+      "item": "tamg:carbon_fibre"
+    }
+  ]
+}

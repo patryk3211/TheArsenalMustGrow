@@ -29,10 +29,12 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
+import org.patryk3211.tamg.Tamg;
 
 @OnlyIn(Dist.CLIENT)
 public class BulletRenderer extends EntityRenderer<BulletEntity> {
-//    public static final ResourceLocation TEXTURE = Tamg.texture("entity/zap_projectile");
+    public static final ResourceLocation TEXTURE = Tamg.texture("entity/bullet");
+    public static final int SIZE = 2;
 
     public BulletRenderer(EntityRendererProvider.Context ctx) {
         super(ctx);
@@ -48,21 +50,21 @@ public class BulletRenderer extends EntityRenderer<BulletEntity> {
         stack.pushPose();
         stack.translate(0, 0.125f, 0);
 
-        stack.rotateY(-yaw);
-        stack.rotateX(-entity.getViewXRot(tickDelta));
+        stack.rotateYDegrees(-yaw);
+        stack.rotateXDegrees(-entity.getViewXRot(tickDelta));
 
         final float UNIT = 1 / 16f;
         final float HALF_UNIT = UNIT / 2f;
 
         for(int i = 0; i < 4; ++i) {
-            stack.rotateZ(90);
+            stack.rotateZDegrees(90);
 
             var positionMatrix = matrices.last().pose();
             light = LightTexture.FULL_BRIGHT;
-            vertex(positionMatrix, normalMatrix, buffer, -HALF_UNIT, -HALF_UNIT, -HALF_UNIT * 5, 0, 0, 0, 0, 1, light);
-            vertex(positionMatrix, normalMatrix, buffer, -HALF_UNIT, -HALF_UNIT, HALF_UNIT * 5, UNIT * 5, 0, 0, 0, 1, light);
-            vertex(positionMatrix, normalMatrix, buffer, HALF_UNIT, HALF_UNIT, HALF_UNIT * 5, UNIT * 5, UNIT, 0, 0, 1, light);
-            vertex(positionMatrix, normalMatrix, buffer, HALF_UNIT, HALF_UNIT, -HALF_UNIT * 5, 0, UNIT, 0, 0, 1, light);
+            vertex(positionMatrix, normalMatrix, buffer, -HALF_UNIT, -HALF_UNIT, -HALF_UNIT * SIZE, 0, 0, 0, 0, 1, light);
+            vertex(positionMatrix, normalMatrix, buffer, -HALF_UNIT, -HALF_UNIT, HALF_UNIT * SIZE, UNIT * SIZE, 0, 0, 0, 1, light);
+            vertex(positionMatrix, normalMatrix, buffer, HALF_UNIT, HALF_UNIT, HALF_UNIT * SIZE, UNIT * SIZE, UNIT, 0, 0, 1, light);
+            vertex(positionMatrix, normalMatrix, buffer, HALF_UNIT, HALF_UNIT, -HALF_UNIT * SIZE, 0, UNIT, 0, 0, 1, light);
         }
 
         stack.popPose();
@@ -70,8 +72,7 @@ public class BulletRenderer extends EntityRenderer<BulletEntity> {
 
     @Override
     public ResourceLocation getTextureLocation(BulletEntity entity) {
-        return null;
-//        return TEXTURE;
+        return TEXTURE;
     }
 
     public void vertex(Matrix4f positionMatrix, Matrix3f normalMatrix, VertexConsumer vertexConsumer, float x, float y, float z, float u, float v, float normalX, float normalZ, float normalY, int light) {
