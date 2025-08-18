@@ -119,10 +119,10 @@ public class BulletEntity extends Projectile {
 //
         var onServer = !world.isClientSide;
 //        damage /= Math.min(affectedEntities.size() + 1, 3);
-        if(onServer && !target.hurt(source, damage)) {
-            kill();
-            return;
-        }
+//        if(onServer && !target.hurt(source, damage)) {
+//            kill();
+//            return;
+//        }
 
 //        if(onServer) {
 //            var damagedEntities = new ArrayList<Entity>();

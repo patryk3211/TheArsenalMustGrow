@@ -50,6 +50,7 @@ import org.jetbrains.annotations.Nullable;
 import org.patryk3211.tamg.Lang;
 import org.patryk3211.tamg.Networking;
 import org.patryk3211.tamg.TamgClient;
+import org.patryk3211.tamg.gun.particle.GunFlashS2CPacket;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -66,6 +67,8 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
     protected float heatCapacity = 1;
     protected float heatPerShot = 0.5f;
     protected float heatDissipation = 0.1f;
+
+    protected Vec3 flashOffset = Vec3.ZERO;
 
     public static final int COLOR_BAR_EMPTY = 0xfffc6703;
     public static final int COLOR_BAR_FULL = 0xfffc2003;
@@ -168,9 +171,9 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
         projectile.shrink(1);
 
         var barrelPos = ShootableGadgetItemMethods.getGunBarrelVec(user, hand == InteractionHand.MAIN_HAND,
-                new Vec3(.25f, -0.15f, 1.0f));
+                new Vec3(.375f, -0.15f, 1.0f));
         var correction = ShootableGadgetItemMethods.getGunBarrelVec(user, hand == InteractionHand.MAIN_HAND,
-                new Vec3(0, 0, 0)).subtract(user.position().add(0, user.getEyeHeight(), 0));
+                new Vec3(0, 0.1f, 0)).subtract(user.position().add(0, user.getEyeHeight(), 0));
 
         var lookVec = user.getLookAngle();
         var motion = lookVec.add(correction)
@@ -186,8 +189,15 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
             ShootableGadgetItemMethods.applyCooldown(user, stack, hand, this::isGun, 20 * 5);
         }
         Function<Boolean, GunS2CPacket> factory = b -> new GunS2CPacket(barrelPos, lookVec.normalize(), stack, hand, 1, b);
-        Networking.getChannel().send(PacketDistributor.TRACKING_ENTITY.with(() -> user), factory.apply(false));
-        Networking.getChannel().send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) user), factory.apply(true));
+
+        var trackingUser = PacketDistributor.TRACKING_ENTITY.with(() -> user);
+        var userDist = PacketDistributor.PLAYER.with(() -> (ServerPlayer) user);
+        Networking.getChannel().send(trackingUser, factory.apply(false));
+        Networking.getChannel().send(userDist, factory.apply(true));
+
+        var flashPacket = new GunFlashS2CPacket(barrelPos, motion);
+        Networking.getChannel().send(trackingUser, flashPacket);
+        Networking.getChannel().send(userDist, flashPacket);
         return InteractionResultHolder.success(user.getItemInHand(hand));
     }
 

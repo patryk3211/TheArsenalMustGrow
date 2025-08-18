@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.patryk3211.tamg.collections.TamgEntities;
 import org.patryk3211.tamg.collections.TamgItems;
+import org.patryk3211.tamg.collections.TamgParticles;
 import org.patryk3211.tamg.data.CuttingRecipes;
 import org.patryk3211.tamg.data.CompactingRecipes;
 import org.patryk3211.tamg.data.SequencedAssemblyRecipes;
@@ -39,8 +40,11 @@ public class Tamg  {
 
         TamgItems.register();
         TamgEntities.register();
+        TamgParticles.register();
 
         Networking.init();
+
+        TamgParticles.PARTICLE_TYPES.register(modEventBus);
 
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> TamgClient::init);
     }

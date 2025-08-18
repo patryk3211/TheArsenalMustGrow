@@ -18,7 +18,6 @@ package org.patryk3211.tamg.gun;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -27,6 +26,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.patryk3211.tamg.Tamg;
@@ -41,7 +41,7 @@ public class BulletRenderer extends EntityRenderer<BulletEntity> {
     }
 
     @Override
-    public void render(BulletEntity entity, float yaw, float tickDelta, PoseStack matrices, MultiBufferSource consumers, int light) {
+    public void render(@NotNull BulletEntity entity, float yaw, float tickDelta, PoseStack matrices, MultiBufferSource consumers, int light) {
         var buffer = consumers.getBuffer(RenderType.entitySolid(getTextureLocation(entity)));
 
         var normalMatrix = matrices.last().normal();
@@ -60,7 +60,6 @@ public class BulletRenderer extends EntityRenderer<BulletEntity> {
             stack.rotateZDegrees(90);
 
             var positionMatrix = matrices.last().pose();
-            light = LightTexture.FULL_BRIGHT;
             vertex(positionMatrix, normalMatrix, buffer, -HALF_UNIT, -HALF_UNIT, -HALF_UNIT * SIZE, 0, 0, 0, 0, 1, light);
             vertex(positionMatrix, normalMatrix, buffer, -HALF_UNIT, -HALF_UNIT, HALF_UNIT * SIZE, UNIT * SIZE, 0, 0, 0, 1, light);
             vertex(positionMatrix, normalMatrix, buffer, HALF_UNIT, HALF_UNIT, HALF_UNIT * SIZE, UNIT * SIZE, UNIT, 0, 0, 1, light);
@@ -71,7 +70,7 @@ public class BulletRenderer extends EntityRenderer<BulletEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(BulletEntity entity) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull BulletEntity entity) {
         return TEXTURE;
     }
 
