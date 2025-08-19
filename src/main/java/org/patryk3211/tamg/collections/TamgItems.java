@@ -4,7 +4,6 @@ import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.phys.Vec3;
 import org.patryk3211.tamg.gun.GunItem;
 import org.patryk3211.tamg.gun.GunProperties;
 
@@ -25,7 +24,7 @@ public class TamgItems {
     public static final ItemEntry<Item> CARBON_FIBRE = ingredient("carbon_fibre");
 
     public static final ItemEntry<GunItem> PISTOL = REGISTRATE.item("pistol", GunItem::new)
-            .transform(GunProperties.setProperties(4, TamgItemTags.PISTOL_BULLETS.tag))
+            .transform(GunProperties.setProperties(4, 0.1f, TamgItemTags.PISTOL_BULLETS.tag))
             .transform(GunProperties.setFlashOffset(5.5, 3, 4))
             .model((ctx, prov) -> {})
             .register();

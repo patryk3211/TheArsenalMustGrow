@@ -62,6 +62,7 @@ import java.util.function.Predicate;
 @MethodsReturnNonnullByDefault
 public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
     protected float damage = 2;
+    protected float knockback = 0.1f;
     // Remember to set this for every new gun instance.
     protected TagKey<Item> bulletTag = null;
     protected float heatCapacity = 1;
@@ -180,7 +181,7 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
                 .normalize()
                 .scale(4);
 
-        var projectileEntity = BulletEntity.create(world, barrelPos, motion, (float) lookVec.y, (float) lookVec.x);
+        var projectileEntity = BulletEntity.create(world, barrelPos, motion, this);
         projectileEntity.setOwner(user);
         world.addFreshEntity(projectileEntity);
 

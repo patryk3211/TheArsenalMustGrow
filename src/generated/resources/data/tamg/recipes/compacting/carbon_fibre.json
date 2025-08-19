@@ -1,5 +1,5 @@
 {
-  "type": "create:pressing",
+  "type": "create:compacting",
   "heatRequirement": "superheated",
   "ingredients": [
     {

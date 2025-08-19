@@ -1,0 +1,11 @@
+{
+  "gun_shot": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "tamg:gun_shot"
+      }
+    ],
+    "subtitle": "tamg.subtitle.gun_shot"
+  }
+}

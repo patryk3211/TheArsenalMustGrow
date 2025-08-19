@@ -16,11 +16,11 @@
 package org.patryk3211.tamg.gun;
 
 import net.minecraft.core.Registry;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
@@ -32,20 +32,27 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.*;
+import org.patryk3211.tamg.collections.TamgDamageTypes;
 import org.patryk3211.tamg.collections.TamgEntities;
+import org.patryk3211.tamg.collections.TamgSoundEvents;
 
 public class BulletEntity extends Projectile {
+    private float damage;
+    private float knockback;
+
     public BulletEntity(EntityType<? extends Projectile> type, Level world) {
         super(type, world);
     }
 
-    public static BulletEntity create(Level world, Vec3 position, Vec3 velocity, float yaw, float pitch) {
+    public static BulletEntity create(Level world, Vec3 position, Vec3 velocity, GunItem source) {
         var entity = new BulletEntity(TamgEntities.BULLET.get(), world);
         entity.setPosRaw(position.x, position.y, position.z);
         entity.setDeltaMovement(velocity);
         ProjectileUtil.rotateTowardsMovement(entity, 1.0f);
         entity.setOldPosAndRot();
         entity.reapplyPosition();
+        entity.damage = source.damage;
+        entity.knockback = source.knockback;
         return entity;
     }
 
@@ -54,12 +61,8 @@ public class BulletEntity extends Projectile {
 
     }
 
-    public static void playHitSound(Level world, Vec3 location) {
-//        M.POTATO_HIT.playOnServer(world, BlockPos.ofFloored(location));
-    }
-
     public static void playLaunchSound(Level world, Vec3 location, float pitch) {
-//        ModdedSoundEvents.ELECTROZAPPER_SHOOT.playAt(world, location, 1, pitch, true);
+        TamgSoundEvents.GUN_SHOT.playAt(world, location, 1, pitch, true);
     }
 
     @Override
@@ -87,8 +90,7 @@ public class BulletEntity extends Projectile {
 
     private DamageSource causeDamage() {
         Registry<DamageType> registry = level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
-        return null;
-//        return new DamageSource(registry.getHolder(ModdedDamageTypes.ZAP).get(), this, getOwner());
+        return new DamageSource(registry.getHolder(TamgDamageTypes.GUN_SHOT).get(), this, getOwner());
     }
 
     @Override
@@ -110,30 +112,17 @@ public class BulletEntity extends Projectile {
         if(target instanceof WitherBoss wither && wither.isPowered())
             return;
 
-        float damage = 8;
+        float damage = this.damage;
+        float knockback = this.knockback;
 
-//        var effectBB = new AABB(target.blockPosition()).inflate(2);
         var world = level();
         var source = causeDamage();
-//        var affectedEntities = world.getEntities(target, effectBB, e -> e instanceof LivingEntity && !e.isInvulnerableTo(source));
-//
-        var onServer = !world.isClientSide;
-//        damage /= Math.min(affectedEntities.size() + 1, 3);
-//        if(onServer && !target.hurt(source, damage)) {
-//            kill();
-//            return;
-//        }
 
-//        if(onServer) {
-//            var damagedEntities = new ArrayList<Entity>();
-//            for(var entity : affectedEntities) {
-//                if(entity.hurt(source, damage))
-//                    damagedEntities.add(entity);
-//                if(damagedEntities.size() >= 2)
-//                    break;
-//            }
-////            ModdedPackets.sendToClientsAround(new ZapProjectileS2CPacket(target, damagedEntities), (ServerLevel) level(), position(), 50);
-//        }
+        var onServer = !world.isClientSide;
+        if(onServer && !target.hurt(source, damage)) {
+            kill();
+            return;
+        }
 
         if(target.getType() == EntityType.ENDERMAN)
             return;
@@ -144,14 +133,14 @@ public class BulletEntity extends Projectile {
             return;
         }
 
-//        if (onServer && knockback > 0) {
-//            Vec3d appliedMotion = this.getVelocity()
-//                    .multiply(1.0D, 0.0D, 1.0D)
-//                    .normalize()
-//                    .multiply(knockback * 0.6);
-//            if (appliedMotion.lengthSquared() > 0.0D)
-//                livingentity.addVelocity(appliedMotion.x, 0.1D, appliedMotion.z);
-//        }
+        if (onServer && knockback > 0) {
+            Vec3 appliedMotion = this.getDeltaMovement()
+                    .multiply(1.0D, 0.0D, 1.0D)
+                    .normalize()
+                    .scale(knockback * 0.6);
+            if (appliedMotion.lengthSqr() > 0.0D)
+                livingTarget.addDeltaMovement(new Vec3(appliedMotion.x, 0.1D, appliedMotion.z));
+        }
 
         if(onServer && owner instanceof LivingEntity livingOwner) {
             EnchantmentHelper.doPostHurtEffects(livingTarget, livingOwner);
@@ -169,16 +158,16 @@ public class BulletEntity extends Projectile {
         }
 
         kill();
-
-//        float damage = projectileType.getDamage() * additionalDamageMult;
-//        float knockback = projectileType.getKnockback() + additionalKnockback;
     }
 
     @Override
     protected void onHitBlock(BlockHitResult hit) {
         super.onHitBlock(hit);
-        if(!level().isClientSide) {
-//            ModdedPackets.sendToClientsTracking(new ZapProjectileS2CPacket(hit), this);
+        var level = level();
+        if(!level.isClientSide) {
+            var state = level.getBlockState(hit.getBlockPos());
+            var sound = state.getSoundType().getHitSound();
+            level.playSound(null, blockPosition(), sound, SoundSource.BLOCKS, 1, 1.5f + random.nextFloat() * 0.1f);
         }
         kill();
     }

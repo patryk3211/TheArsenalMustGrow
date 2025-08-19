@@ -18,6 +18,7 @@ package org.patryk3211.tamg.gun;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.equipment.zapper.ShootableGadgetRenderHandler;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -28,7 +29,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class GunRenderHandler extends ShootableGadgetRenderHandler {
     @Override
     protected void playSound(InteractionHand hand, Vec3 position) {
-//        ZapProjectileEntity.playLaunchSound(Minecraft.getInstance().level, position, 1);
+        BulletEntity.playLaunchSound(Minecraft.getInstance().level, position, 1);
     }
 
     @Override

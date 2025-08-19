@@ -2,6 +2,7 @@ package org.patryk3211.tamg;
 
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.tterrag.registrate.providers.ProviderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -14,10 +15,13 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.patryk3211.tamg.collections.TamgEntities;
 import org.patryk3211.tamg.collections.TamgItems;
 import org.patryk3211.tamg.collections.TamgParticles;
+import org.patryk3211.tamg.collections.TamgSoundEvents;
 import org.patryk3211.tamg.data.CuttingRecipes;
 import org.patryk3211.tamg.data.CompactingRecipes;
 import org.patryk3211.tamg.data.SequencedAssemblyRecipes;
 import org.slf4j.Logger;
+
+import java.util.function.BiConsumer;
 
 @Mod(Tamg.MOD_ID)
 public class Tamg  {
@@ -33,10 +37,11 @@ public class Tamg  {
         LOGGER.info("Create: The Arsenal Must Grow is loading");
 
         REGISTRATE = CreateRegistrate.create(MOD_ID)
-                .defaultCreativeTab("the_arsenal_must_grow", b -> b
-                        .title(Component.translatable("itemGroup.tamg.main")))
+                .defaultCreativeTab("the_arsenal_must_grow")
                 .build();
         REGISTRATE.registerEventListeners(modEventBus);
+
+        TamgSoundEvents.prepare();
 
         TamgItems.register();
         TamgEntities.register();
@@ -62,8 +67,14 @@ public class Tamg  {
         var generator = event.getGenerator();
         var pack = generator.getPackOutput();
 
+        REGISTRATE.addDataGenerator(ProviderType.LANG, provider -> {
+            BiConsumer<String, String> langConsumer = provider::add;
+            TamgSoundEvents.provideLang(langConsumer);
+        });
+
         generator.addProvider(true, new SequencedAssemblyRecipes(pack));
         generator.addProvider(true, new CuttingRecipes(pack));
         generator.addProvider(true, new CompactingRecipes(pack));
+        generator.addProvider(true, TamgSoundEvents.provider(pack));
     }
 }

@@ -7,9 +7,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.phys.Vec3;
 
 public class GunProperties {
-    public static <T extends GunItem, P> NonNullUnaryOperator<ItemBuilder<T, P>> setProperties(float damage, TagKey<Item> bulletTag) {
+    public static <T extends GunItem, P> NonNullUnaryOperator<ItemBuilder<T, P>> setProperties(float damage, float knockback, TagKey<Item> bulletTag) {
         return b -> b.onRegister(item -> {
             item.damage = damage;
+            item.knockback = knockback;
             item.bulletTag = bulletTag;
         });
     }
