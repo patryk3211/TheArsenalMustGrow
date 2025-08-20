@@ -9,7 +9,6 @@ import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.patryk3211.tamg.Tamg;
-import org.patryk3211.tamg.gun.particle.GunFlashParticleOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,6 @@ public class TamgParticles {
     private static final List<ParticleEntry<?>> all = new ArrayList<>();
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Tamg.MOD_ID);
 
-    public static final ParticleType<GunFlashParticleOptions> GUN_FLASH = register("gun_flash", GunFlashParticleOptions::new);
 
     private static <T extends ParticleOptions> ParticleType<T> register(String name, Supplier<? extends ICustomParticleData<T>> typeFactory) {
         var type = typeFactory.get().createType();

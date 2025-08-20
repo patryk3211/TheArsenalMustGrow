@@ -15,18 +15,23 @@
  */
 package org.patryk3211.tamg.gun;
 
-import com.simibubi.create.content.equipment.potatoCannon.PotatoCannonPacket;
+import com.simibubi.create.content.equipment.zapper.ShootGadgetPacket;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.patryk3211.tamg.Tamg;
 import org.patryk3211.tamg.TamgClient;
 
-public class GunS2CPacket extends PotatoCannonPacket {
-    public GunS2CPacket(Vec3 location, Vec3 motion, ItemStack item, InteractionHand hand, float pitch, boolean self) {
-        super(location, motion, item, hand, pitch, self);
+public class GunS2CPacket extends ShootGadgetPacket {
+    private Player shooter;
+
+    public GunS2CPacket(Vec3 location, InteractionHand hand, boolean self, Player shooter) {
+        super(location, hand, self);
+        this.shooter = shooter;
     }
 
     public GunS2CPacket(FriendlyByteBuf buffer) {
@@ -34,8 +39,27 @@ public class GunS2CPacket extends PotatoCannonPacket {
     }
 
     @Override
-    protected void handleAdditional() {
+    @OnlyIn(Dist.CLIENT)
+    protected void readAdditional(FriendlyByteBuf buffer) {
+        var level = Minecraft.getInstance().level;
+        if(level.getEntity(buffer.readInt()) instanceof Player player) {
+            this.shooter = player;
+        } else {
+            Tamg.LOGGER.warn("Received shoot packet with invalid shooter");
+        }
+    }
 
+    @Override
+    protected void writeAdditional(FriendlyByteBuf buffer) {
+        buffer.writeInt(shooter.getId());
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    protected void handleAdditional() {
+        if(shooter == null)
+            return;
+        TamgClient.GUN_RENDER_HANDLER.beforeShoot(shooter, hand);
     }
 
     @Override

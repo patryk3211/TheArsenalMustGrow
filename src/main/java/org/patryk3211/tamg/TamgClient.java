@@ -7,6 +7,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import org.patryk3211.tamg.collections.TamgPartialModels;
 import org.patryk3211.tamg.collections.TamgParticles;
+import org.patryk3211.tamg.collections.TamgRenderTypes;
 import org.patryk3211.tamg.gun.GunRenderHandler;
 
 @OnlyIn(Dist.CLIENT)
@@ -15,6 +16,7 @@ public class TamgClient {
 
     public static void init() {
         TamgPartialModels.load();
+        TamgRenderTypes.init();
 
         GUN_RENDER_HANDLER.registerListeners(MinecraftForge.EVENT_BUS);
         Tamg.modEventBus.addListener(TamgClient::particleManagerRegistration);

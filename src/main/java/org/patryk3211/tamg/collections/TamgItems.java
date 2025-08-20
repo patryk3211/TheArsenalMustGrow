@@ -25,7 +25,8 @@ public class TamgItems {
 
     public static final ItemEntry<GunItem> PISTOL = REGISTRATE.item("pistol", GunItem::new)
             .transform(GunProperties.setProperties(4, 0.1f, TamgItemTags.PISTOL_BULLETS.tag))
-            .transform(GunProperties.setFlashOffset(5.5, 3, 4))
+            .transform(GunProperties.setFlashOffset(0, -2.5, -4))
+            .transform(GunProperties.setShootVectors(0.375, -0.15, 1.0, 0, 0.1, 0))
             .model((ctx, prov) -> {})
             .register();
 

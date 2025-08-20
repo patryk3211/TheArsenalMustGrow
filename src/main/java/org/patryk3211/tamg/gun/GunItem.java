@@ -50,7 +50,6 @@ import org.jetbrains.annotations.Nullable;
 import org.patryk3211.tamg.Lang;
 import org.patryk3211.tamg.Networking;
 import org.patryk3211.tamg.TamgClient;
-import org.patryk3211.tamg.gun.particle.GunFlashS2CPacket;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -70,12 +69,14 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
     protected float heatDissipation = 0.1f;
 
     protected Vec3 flashOffset = Vec3.ZERO;
+    protected Vec3 barrel = Vec3.ZERO;
+    protected Vec3 correction = Vec3.ZERO;
 
     public static final int COLOR_BAR_EMPTY = 0xfffc6703;
     public static final int COLOR_BAR_FULL = 0xfffc2003;
 
     public GunItem(Properties settings) {
-        super(settings);
+        super(settings.stacksTo(1));
     }
 
     @Override
@@ -169,7 +170,8 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
         var projectile = user.getProjectile(stack);
         if(projectile.isEmpty())
             return InteractionResultHolder.fail(stack);
-        projectile.shrink(1);
+        if(!user.isCreative())
+            projectile.shrink(1);
 
         var barrelPos = ShootableGadgetItemMethods.getGunBarrelVec(user, hand == InteractionHand.MAIN_HAND,
                 new Vec3(.375f, -0.15f, 1.0f));
@@ -189,16 +191,12 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
             // Overheated
             ShootableGadgetItemMethods.applyCooldown(user, stack, hand, this::isGun, 20 * 5);
         }
-        Function<Boolean, GunS2CPacket> factory = b -> new GunS2CPacket(barrelPos, lookVec.normalize(), stack, hand, 1, b);
+        Function<Boolean, GunS2CPacket> factory = b -> new GunS2CPacket(barrelPos, hand, b, user);
 
         var trackingUser = PacketDistributor.TRACKING_ENTITY.with(() -> user);
         var userDist = PacketDistributor.PLAYER.with(() -> (ServerPlayer) user);
         Networking.getChannel().send(trackingUser, factory.apply(false));
         Networking.getChannel().send(userDist, factory.apply(true));
-
-        var flashPacket = new GunFlashS2CPacket(barrelPos, motion);
-        Networking.getChannel().send(trackingUser, flashPacket);
-        Networking.getChannel().send(userDist, flashPacket);
         return InteractionResultHolder.success(user.getItemInHand(hand));
     }
 
@@ -211,12 +209,14 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
 
         float damageF = this.damage;//type.getDamage() * additionalDamageMult;
         var damage = Component.literal(damageF == Mth.floor(damageF) ? "" + Mth.floor(damageF) : "" + damageF);
-        var reloadTicks = Component.literal("10");
+
+        float knockbackF = this.knockback;//type.getDamage() * additionalDamageMult;
+        var knockback = Component.literal(damageF == Mth.floor(damageF) ? "" + Mth.floor(damageF) : "" + damageF);
 
 //        damage = damage.formatted(Formatting.DARK_GREEN);
 
         tooltip.add(spacing.plainCopy().append(Lang.translateDirect("gun.bullet.damage", damage).withStyle(ChatFormatting.DARK_GREEN)));
-        tooltip.add(spacing.plainCopy().append(Lang.translateDirect("gun.bullet.reload", reloadTicks).withStyle(ChatFormatting.DARK_GREEN)));
+        tooltip.add(spacing.plainCopy().append(Lang.translateDirect("gun.bullet.knockback", knockback).withStyle(ChatFormatting.DARK_GREEN)));
         super.appendHoverText(stack, world, tooltip, context);
     }
 

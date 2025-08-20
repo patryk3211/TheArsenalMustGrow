@@ -5,6 +5,7 @@ import org.patryk3211.tamg.Tamg;
 
 public class TamgPartialModels {
     public static final PartialModel FLASH = model("item/flash");
+    public static final PartialModel PISTOL_TOP = model("item/pistol_top");
 
     private static PartialModel model(String path) {
         return PartialModel.of(Tamg.asResource(path));

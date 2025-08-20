@@ -2,6 +2,7 @@ package org.patryk3211.tamg;
 
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.simibubi.create.foundation.utility.FilesHelper;
 import com.tterrag.registrate.providers.ProviderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -70,11 +71,27 @@ public class Tamg  {
         REGISTRATE.addDataGenerator(ProviderType.LANG, provider -> {
             BiConsumer<String, String> langConsumer = provider::add;
             TamgSoundEvents.provideLang(langConsumer);
+
+            provideDefaultLang("tooltips", langConsumer);
         });
 
         generator.addProvider(true, new SequencedAssemblyRecipes(pack));
         generator.addProvider(true, new CuttingRecipes(pack));
         generator.addProvider(true, new CompactingRecipes(pack));
         generator.addProvider(true, TamgSoundEvents.provider(pack));
+    }
+
+    private static void provideDefaultLang(String fileName, BiConsumer<String, String> consumer) {
+        var path = "assets/tamg/lang/default/" + fileName + ".json";
+        var jsonElement = FilesHelper.loadJsonResource(path);
+        if (jsonElement == null) {
+            throw new IllegalStateException(String.format("Could not find default lang file: %s", path));
+        }
+        var jsonObject = jsonElement.getAsJsonObject();
+        for(var entry : jsonObject.entrySet()) {
+            var key = entry.getKey();
+            var value = entry.getValue().getAsString();
+            consumer.accept(key, value);
+        }
     }
 }
