@@ -130,7 +130,7 @@ public class GunRenderHandler extends ShootableGadgetRenderHandler {
 
         public void tick() {
             prevFlash = flash;
-            flash *= 0.9f;
+            flash *= 0.5f;
 
             prevTop = topOffset;
             if(topOffset < 1.0f) {
