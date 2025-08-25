@@ -139,7 +139,7 @@ public class BulletEntity extends Projectile {
                     .normalize()
                     .scale(knockback * 0.6);
             if (appliedMotion.lengthSqr() > 0.0D)
-                livingTarget.addDeltaMovement(new Vec3(appliedMotion.x, 0.1D, appliedMotion.z));
+                livingTarget.addDeltaMovement(new Vec3(appliedMotion.x, 0.05D, appliedMotion.z));
         }
 
         if(onServer && owner instanceof LivingEntity livingOwner) {

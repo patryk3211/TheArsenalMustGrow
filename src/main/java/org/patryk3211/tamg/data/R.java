@@ -2,6 +2,8 @@ package org.patryk3211.tamg.data;
 
 import com.drmangotea.tfmg.registry.TFMGItems;
 import com.simibubi.create.AllItems;
+import com.simibubi.create.AllTags;
+import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -52,5 +54,13 @@ class R {
 
     public static ItemLike steelMechanism() {
         return TFMGItems.STEEL_MECHANISM;
+    }
+
+    public static TagKey<Item> ironSheet() {
+        return AllTags.forgeItemTag("plates/iron");
+    }
+
+    public static ItemLike precisionMechanism() {
+        return AllItems.PRECISION_MECHANISM;
     }
 }

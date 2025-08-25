@@ -17,7 +17,6 @@ package org.patryk3211.tamg.gun;
 
 import com.simibubi.create.content.equipment.zapper.ShootableGadgetItemMethods;
 import com.simibubi.create.foundation.item.CustomArmPoseItem;
-import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 import net.createmod.catnip.theme.Color;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -42,9 +41,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import org.patryk3211.tamg.Lang;
@@ -53,7 +49,6 @@ import org.patryk3211.tamg.TamgClient;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -77,12 +72,6 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
 
     public GunItem(Properties settings) {
         super(settings.stacksTo(1));
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(SimpleCustomRenderer.create(this, new GunItemRenderer()));
     }
 
     @Override
@@ -174,9 +163,13 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
             projectile.shrink(1);
 
         var barrelPos = ShootableGadgetItemMethods.getGunBarrelVec(user, hand == InteractionHand.MAIN_HAND,
-                new Vec3(.375f, -0.15f, 1.0f));
+                this.barrel
+//                new Vec3(.375f, -.15f, 1.25f)
+        );
         var correction = ShootableGadgetItemMethods.getGunBarrelVec(user, hand == InteractionHand.MAIN_HAND,
-                new Vec3(0, 0.1f, 0)).subtract(user.position().add(0, user.getEyeHeight(), 0));
+                this.correction
+//                new Vec3(-0.025f, 0.0125f, 0)
+        ).subtract(user.position().add(0, user.getEyeHeight(), 0));
 
         var lookVec = user.getLookAngle();
         var motion = lookVec.add(correction)

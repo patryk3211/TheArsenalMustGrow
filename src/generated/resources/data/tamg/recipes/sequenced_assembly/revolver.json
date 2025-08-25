@@ -7,7 +7,7 @@
   "results": [
     {
       "chance": 100.0,
-      "item": "tamg:pistol"
+      "item": "tamg:revolver"
     },
     {
       "chance": 5.0,
@@ -15,7 +15,7 @@
     },
     {
       "chance": 3.0,
-      "item": "tfmg:steel_ingot"
+      "item": "minecraft:iron_ingot"
     },
     {
       "chance": 2.0,
@@ -27,7 +27,23 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "tamg:incomplete_pistol"
+          "item": "tamg:incomplete_revolver"
+        },
+        {
+          "tag": "forge:plates/iron"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_revolver"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_revolver"
         },
         {
           "item": "tfmg:steel_mechanism"
@@ -35,7 +51,7 @@
       ],
       "results": [
         {
-          "item": "tamg:incomplete_pistol"
+          "item": "tamg:incomplete_revolver"
         }
       ]
     },
@@ -43,7 +59,23 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "tamg:incomplete_pistol"
+          "item": "tamg:incomplete_revolver"
+        },
+        {
+          "item": "create:precision_mechanism"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_revolver"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_revolver"
         },
         {
           "item": "tamg:carbon_fibre"
@@ -51,7 +83,7 @@
       ],
       "results": [
         {
-          "item": "tamg:incomplete_pistol"
+          "item": "tamg:incomplete_revolver"
         }
       ]
     },
@@ -59,7 +91,7 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "tamg:incomplete_pistol"
+          "item": "tamg:incomplete_revolver"
         },
         {
           "item": "tfmg:screw"
@@ -67,7 +99,7 @@
       ],
       "results": [
         {
-          "item": "tamg:incomplete_pistol"
+          "item": "tamg:incomplete_revolver"
         }
       ]
     },
@@ -75,7 +107,7 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "tamg:incomplete_pistol"
+          "item": "tamg:incomplete_revolver"
         },
         {
           "item": "tfmg:screwdriver"
@@ -84,7 +116,7 @@
       "keepHeldItem": true,
       "results": [
         {
-          "item": "tamg:incomplete_pistol"
+          "item": "tamg:incomplete_revolver"
         }
       ]
     },
@@ -92,7 +124,7 @@
       "type": "create:filling",
       "ingredients": [
         {
-          "item": "tamg:incomplete_pistol"
+          "item": "tamg:incomplete_revolver"
         },
         {
           "amount": 250,
@@ -102,12 +134,12 @@
       ],
       "results": [
         {
-          "item": "tamg:incomplete_pistol"
+          "item": "tamg:incomplete_revolver"
         }
       ]
     }
   ],
   "transitionalItem": {
-    "item": "tamg:incomplete_pistol"
+    "item": "tamg:incomplete_revolver"
   }
 }

@@ -1,10 +1,14 @@
 package org.patryk3211.tamg.data;
 
+import com.drmangotea.tfmg.registry.TFMGFluids;
 import com.drmangotea.tfmg.registry.TFMGItems;
 import com.simibubi.create.AllItems;
+import com.simibubi.create.api.data.recipe.FillingRecipeGen;
 import com.simibubi.create.api.data.recipe.SequencedAssemblyRecipeGen;
+import com.simibubi.create.content.fluids.transfer.FillingRecipe;
 import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
 import com.simibubi.create.content.kinetics.press.PressingRecipe;
+import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Items;
 import org.patryk3211.tamg.Tamg;
@@ -13,7 +17,8 @@ import org.patryk3211.tamg.collections.TamgItems;
 @SuppressWarnings("unused")
 public class SequencedAssemblyRecipes extends SequencedAssemblyRecipeGen {
     GeneratedRecipe
-        PISTOL = create("pistol", b -> b
+
+    PISTOL = create("pistol", b -> b
             .require(AllItems.POTATO_CANNON)
             .addOutput(TamgItems.PISTOL, 100)
             .addOutput(TFMGItems.STEEL_MECHANISM, 5)
@@ -24,7 +29,26 @@ public class SequencedAssemblyRecipes extends SequencedAssemblyRecipeGen {
             .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.steelMechanism()))
             .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.carbonFibre()))
             .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.screws()))
-            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.screwDriver()).toolNotConsumed())),
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.screwDriver()).toolNotConsumed())
+            .addStep(FillingRecipe::new, rb -> rb.require(TFMGFluids.LUBRICATION_OIL.get(), 250))
+    ),
+
+    REVOLVER = create("revolver", b -> b
+            .require(AllItems.POTATO_CANNON)
+            .addOutput(TamgItems.REVOLVER, 100)
+            .addOutput(TFMGItems.STEEL_MECHANISM, 5)
+            .addOutput(Items.IRON_INGOT, 3)
+            .addOutput(TFMGItems.SCREW, 2)
+            .transitionTo(TamgItems.INCOMPLETE_REVOLVER)
+            .loops(2)
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.ironSheet()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.steelMechanism()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.precisionMechanism()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.carbonFibre()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.screws()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.screwDriver()).toolNotConsumed())
+            .addStep(FillingRecipe::new, rb -> rb.require(TFMGFluids.LUBRICATION_OIL.get(), 250))
+    ),
 
     SMALL_BULLET = create("small_bullet", b -> b
             .require(TamgItems.SMALL_BULLET_CASING.get())
