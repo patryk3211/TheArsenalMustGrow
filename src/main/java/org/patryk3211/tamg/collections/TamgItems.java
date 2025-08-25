@@ -14,6 +14,7 @@ import org.patryk3211.tamg.gun.GunProperties;
 import org.patryk3211.tamg.gun.pistol.PistolAnimationData;
 import org.patryk3211.tamg.gun.pistol.PistolItemRenderer;
 import org.patryk3211.tamg.gun.revolver.RevolverAnimationData;
+import org.patryk3211.tamg.gun.revolver.RevolverItem;
 import org.patryk3211.tamg.gun.revolver.RevolverItemRenderer;
 
 import static org.patryk3211.tamg.Tamg.REGISTRATE;
@@ -43,7 +44,7 @@ public class TamgItems {
             .model(gunBaseModel())
             .register();
 
-    public static final ItemEntry<GunItem> REVOLVER = REGISTRATE.item("revolver", GunItem::new)
+    public static final ItemEntry<RevolverItem> REVOLVER = REGISTRATE.item("revolver", RevolverItem::new)
             .transform(setProperties(8, 0.5f, TamgItemTags.PISTOL_BULLETS.tag))
             .transform(setFlashOffset(0, -0.5, -11))
             .transform(setThermalProperties(1.0f, 0.9f, 0.05f))

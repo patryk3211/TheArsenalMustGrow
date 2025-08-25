@@ -204,7 +204,7 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
         var damage = Component.literal(damageF == Mth.floor(damageF) ? "" + Mth.floor(damageF) : "" + damageF);
 
         float knockbackF = this.knockback;//type.getDamage() * additionalDamageMult;
-        var knockback = Component.literal(damageF == Mth.floor(damageF) ? "" + Mth.floor(damageF) : "" + damageF);
+        var knockback = Component.literal(knockbackF == Mth.floor(knockbackF) ? "" + Mth.floor(knockbackF) : "" + knockbackF);
 
 //        damage = damage.formatted(Formatting.DARK_GREEN);
 
