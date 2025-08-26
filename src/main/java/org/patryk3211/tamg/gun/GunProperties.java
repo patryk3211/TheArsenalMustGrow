@@ -17,19 +17,9 @@ import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 public class GunProperties {
-    public static <T extends GunItem, P> NonNullUnaryOperator<ItemBuilder<T, P>> setProperties(float damage, float knockback, TagKey<Item> bulletTag) {
+    public static <T extends GunItem, P> NonNullUnaryOperator<ItemBuilder<T, P>> setBulletTag(TagKey<Item> bulletTag) {
         return b -> b.onRegister(item -> {
-            item.damage = damage;
-            item.knockback = knockback;
             item.bulletTag = bulletTag;
-        });
-    }
-
-    public static <T extends GunItem, P> NonNullUnaryOperator<ItemBuilder<T, P>> setThermalProperties(float heatCapacity, float heatPerShot, float heatDissipation) {
-        return b -> b.onRegister(item -> {
-            item.heatCapacity = heatCapacity;
-            item.heatPerShot = heatPerShot;
-            item.heatDissipation = heatDissipation;
         });
     }
 

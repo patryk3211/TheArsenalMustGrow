@@ -20,13 +20,23 @@ import org.patryk3211.tamg.collections.TamgRenderTypes;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class GunItemRenderer<A extends GunAnimationData> extends CustomRenderedItemModelRenderer {
+    private final Class<A> clazz;
+
+    protected GunItemRenderer(Class<A> clazz) {
+        this.clazz = clazz;
+    }
+
     @Override
     protected void render(ItemStack stack, CustomRenderedItemModel model, PartialItemModelRenderer renderer, ItemDisplayContext transformType, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         renderer.render(model.getOriginalModel(), light);
 
-        var animation = (A) TamgClient.GUN_RENDER_HANDLER.getAnimation(stack);
+        var animation = TamgClient.GUN_RENDER_HANDLER.getAnimation(stack);
+        A castAnimation = null;
+        if(clazz.isInstance(animation)) {
+            castAnimation = (A) animation;
+        }
         var pt = AnimationTickHolder.getPartialTicks();
-        renderAnimatedPart((GunItem) stack.getItem(), animation, pt, renderer, ms, buffer, light);
+        renderAnimatedPart((GunItem) stack.getItem(), castAnimation, pt, renderer, ms, buffer, light);
     }
 
     protected abstract PartialModel flash();

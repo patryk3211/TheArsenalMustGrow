@@ -46,22 +46,26 @@ import org.jetbrains.annotations.Nullable;
 import org.patryk3211.tamg.Lang;
 import org.patryk3211.tamg.Networking;
 import org.patryk3211.tamg.TamgClient;
+import org.patryk3211.tamg.config.CGuns;
+import org.patryk3211.tamg.config.TamgConfigs;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static org.patryk3211.tamg.config.CGuns.GunProperties.*;
+
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
-    protected float damage = 2;
-    protected float knockback = 0.1f;
+//    protected float damage = 2;
+//    protected float knockback = 0.1f;
     // Remember to set this for every new gun instance.
     protected TagKey<Item> bulletTag = null;
-    protected float heatCapacity = 1;
-    protected float heatPerShot = 0.5f;
-    protected float heatDissipation = 0.1f;
+//    protected float heatCapacity = 1;
+//    protected float heatPerShot = 0.5f;
+//    protected float heatDissipation = 0.1f;
 
     protected Vec3 flashOffset = Vec3.ZERO;
     protected Vec3 barrel = Vec3.ZERO;
@@ -72,6 +76,14 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
 
     public GunItem(Properties settings) {
         super(settings.stacksTo(1));
+    }
+
+    public float configF(CGuns.GunProperties property) {
+        return (float) TamgConfigs.server().guns.getDouble(this, property);
+    }
+
+    public int configI(CGuns.GunProperties property) {
+        return TamgConfigs.server().guns.getInt(this, property);
     }
 
     @Override
@@ -102,7 +114,7 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
     public static float getHeatPercent(ItemStack stack) {
         if(!(stack.getItem() instanceof GunItem gun))
             return 0;
-        return getHeatAmount(stack) / gun.heatCapacity;
+        return getHeatAmount(stack) / gun.configF(HEAT_CAPACITY);
     }
 
     @Override
@@ -124,12 +136,12 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
         if(stack.getItem() != this)
             throw new IllegalArgumentException("Stack must be of the correct item");
         var current = getHeatAmount(stack);
-        current += heatPerShot;
-        if(current >= heatCapacity) {
-            current = heatCapacity;
+        current += configF(HEAT_PER_SHOT);
+        if(current >= configF(HEAT_CAPACITY)) {
+            current = configF(HEAT_CAPACITY);
         }
         stack.getOrCreateTag().putFloat("Heat", current);
-        return current >= heatCapacity;
+        return current >= configF(HEAT_CAPACITY);
     }
 
     @Override
@@ -138,7 +150,7 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
         var current = getHeatAmount(stack);
         if(current <= 0)
             return;
-        stack.getOrCreateTag().putFloat("Heat", Math.max(current - heatDissipation, 0));
+        stack.getOrCreateTag().putFloat("Heat", Math.max(current - configF(HEAT_DISSIPATION), 0));
     }
 
     @Override
@@ -146,6 +158,12 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
         if(context.getPlayer() == null)
             return InteractionResult.FAIL;
         return use(context.getLevel(), context.getPlayer(), context.getHand()).getResult();
+    }
+
+    public void cooldownIfNotCoolingDown(Player player, int ticks) {
+        if(player.getCooldowns().isOnCooldown(this))
+            return;
+        player.getCooldowns().addCooldown(this, ticks);
     }
 
     @Override
@@ -186,6 +204,18 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
         }
         Function<Boolean, GunS2CPacket> factory = b -> new GunS2CPacket(barrelPos, hand, b, user);
 
+        var selfKnockback = configF(SELF_KNOCKBACK);
+        if(selfKnockback > 0) {
+            // Knockback user
+            var selfMotion = lookVec.normalize().scale(-selfKnockback);
+            user.addDeltaMovement(selfMotion);
+            user.hurtMarked = true;
+        }
+
+        int cooldown = configI(USE_COOLDOWN);
+        if(cooldown > 0)
+            cooldownIfNotCoolingDown(user, cooldown);
+
         var trackingUser = PacketDistributor.TRACKING_ENTITY.with(() -> user);
         var userDist = PacketDistributor.PLAYER.with(() -> (ServerPlayer) user);
         Networking.getChannel().send(trackingUser, factory.apply(false));
@@ -200,16 +230,17 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
                 .withStyle(ChatFormatting.GRAY));
         var spacing = Component.literal(" ");
 
-        float damageF = this.damage;//type.getDamage() * additionalDamageMult;
-        var damage = Component.literal(damageF == Mth.floor(damageF) ? "" + Mth.floor(damageF) : "" + damageF);
-
-        float knockbackF = this.knockback;//type.getDamage() * additionalDamageMult;
-        var knockback = Component.literal(knockbackF == Mth.floor(knockbackF) ? "" + Mth.floor(knockbackF) : "" + knockbackF);
-
-//        damage = damage.formatted(Formatting.DARK_GREEN);
-
-        tooltip.add(spacing.plainCopy().append(Lang.translateDirect("gun.bullet.damage", damage).withStyle(ChatFormatting.DARK_GREEN)));
-        tooltip.add(spacing.plainCopy().append(Lang.translateDirect("gun.bullet.knockback", knockback).withStyle(ChatFormatting.DARK_GREEN)));
+        float damageF = configF(DAMAGE);//type.getDamage() * additionalDamageMult;
+        if(damageF > 0) {
+            var damage = Component.literal(damageF == Mth.floor(damageF) ? "" + Mth.floor(damageF) : "" + damageF);
+//            damage = damage.formatted(Formatting.DARK_GREEN);
+            tooltip.add(spacing.plainCopy().append(Lang.translateDirect("gun.bullet.damage", damage).withStyle(ChatFormatting.DARK_GREEN)));
+        }
+        float knockbackF = configF(KNOCKBACK);//type.getDamage() * additionalDamageMult;
+        if(knockbackF > 0) {
+            var knockback = Component.literal(knockbackF == Mth.floor(knockbackF) ? "" + Mth.floor(knockbackF) : "" + knockbackF);
+            tooltip.add(spacing.plainCopy().append(Lang.translateDirect("gun.bullet.knockback", knockback).withStyle(ChatFormatting.DARK_GREEN)));
+        }
         super.appendHoverText(stack, world, tooltip, context);
     }
 

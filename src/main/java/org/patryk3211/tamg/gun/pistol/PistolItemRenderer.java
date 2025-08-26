@@ -10,6 +10,10 @@ import org.patryk3211.tamg.gun.GunItem;
 import org.patryk3211.tamg.gun.GunItemRenderer;
 
 public class PistolItemRenderer extends GunItemRenderer<PistolAnimationData> {
+    public PistolItemRenderer() {
+        super(PistolAnimationData.class);
+    }
+
     @Override
     protected PartialModel flash() {
         return TamgPartialModels.PISTOL_FLASH;

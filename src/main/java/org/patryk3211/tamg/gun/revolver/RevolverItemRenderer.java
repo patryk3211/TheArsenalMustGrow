@@ -11,6 +11,10 @@ import org.patryk3211.tamg.gun.GunItem;
 import org.patryk3211.tamg.gun.GunItemRenderer;
 
 public class RevolverItemRenderer extends GunItemRenderer<RevolverAnimationData> {
+    public RevolverItemRenderer() {
+        super(RevolverAnimationData.class);
+    }
+
     @Override
     protected PartialModel flash() {
         return TamgPartialModels.REVOLVER_FLASH;

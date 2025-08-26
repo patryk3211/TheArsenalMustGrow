@@ -12,11 +12,13 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.patryk3211.tamg.collections.TamgEntities;
 import org.patryk3211.tamg.collections.TamgItems;
 import org.patryk3211.tamg.collections.TamgParticles;
 import org.patryk3211.tamg.collections.TamgSoundEvents;
+import org.patryk3211.tamg.config.TamgConfigs;
 import org.patryk3211.tamg.data.CuttingRecipes;
 import org.patryk3211.tamg.data.CompactingRecipes;
 import org.patryk3211.tamg.data.SequencedAssemblyRecipes;
@@ -52,6 +54,8 @@ public class Tamg  {
 
         TamgParticles.PARTICLE_TYPES.register(modEventBus);
 
+        TamgConfigs.register(context);
+
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> TamgClient::init);
     }
 
@@ -79,6 +83,16 @@ public class Tamg  {
         generator.addProvider(true, new CuttingRecipes(pack));
         generator.addProvider(true, new CompactingRecipes(pack));
         generator.addProvider(true, TamgSoundEvents.provider(pack));
+    }
+
+    @SubscribeEvent
+    public static void configLoad(ModConfigEvent.Loading event) {
+        TamgConfigs.onLoad(event.getConfig());
+    }
+
+    @SubscribeEvent
+    public static void configReload(ModConfigEvent.Reloading event) {
+        TamgConfigs.onReload(event.getConfig());
     }
 
     private static void provideDefaultLang(String fileName, BiConsumer<String, String> consumer) {

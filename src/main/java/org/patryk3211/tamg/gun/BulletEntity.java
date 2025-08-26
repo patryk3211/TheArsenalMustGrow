@@ -35,6 +35,7 @@ import net.minecraft.world.phys.*;
 import org.patryk3211.tamg.collections.TamgDamageTypes;
 import org.patryk3211.tamg.collections.TamgEntities;
 import org.patryk3211.tamg.collections.TamgSoundEvents;
+import org.patryk3211.tamg.config.CGuns;
 
 public class BulletEntity extends Projectile {
     private float damage;
@@ -51,8 +52,8 @@ public class BulletEntity extends Projectile {
         ProjectileUtil.rotateTowardsMovement(entity, 1.0f);
         entity.setOldPosAndRot();
         entity.reapplyPosition();
-        entity.damage = source.damage;
-        entity.knockback = source.knockback;
+        entity.damage = source.configF(CGuns.GunProperties.DAMAGE);
+        entity.knockback = source.configF(CGuns.GunProperties.KNOCKBACK);
         return entity;
     }
 

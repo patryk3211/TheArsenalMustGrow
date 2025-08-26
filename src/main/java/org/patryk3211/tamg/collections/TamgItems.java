@@ -9,12 +9,11 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import org.patryk3211.tamg.armor.Armor;
+import org.patryk3211.tamg.config.CGuns;
 import org.patryk3211.tamg.gun.GunItem;
-import org.patryk3211.tamg.gun.GunProperties;
 import org.patryk3211.tamg.gun.pistol.PistolAnimationData;
 import org.patryk3211.tamg.gun.pistol.PistolItemRenderer;
 import org.patryk3211.tamg.gun.revolver.RevolverAnimationData;
-import org.patryk3211.tamg.gun.revolver.RevolverItem;
 import org.patryk3211.tamg.gun.revolver.RevolverItemRenderer;
 
 import static org.patryk3211.tamg.Tamg.REGISTRATE;
@@ -35,19 +34,19 @@ public class TamgItems {
     public static final ItemEntry<Item> CARBON_FIBRE = ingredient("carbon_fibre");
 
     public static final ItemEntry<GunItem> PISTOL = REGISTRATE.item("pistol", GunItem::new)
-            .transform(setProperties(4, 0, TamgItemTags.PISTOL_BULLETS.tag))
+            .transform(CGuns.base(4, 0, 1.0, 0.5, 0.1, 0, 0))
+            .transform(setBulletTag(TamgItemTags.PISTOL_BULLETS.tag))
             .transform(setFlashOffset(0, -2.5, -4))
-            .transform(setThermalProperties(1.0f, 0.5f, 0.1f))
             .transform(setShootVectors(0.375, -0.15, 1.0, -0.025, 0.0125, 0))
             .transform(withAnimationData(() -> PistolAnimationData::new))
             .transform(withRenderer(() -> PistolItemRenderer::new))
             .model(gunBaseModel())
             .register();
 
-    public static final ItemEntry<RevolverItem> REVOLVER = REGISTRATE.item("revolver", RevolverItem::new)
-            .transform(setProperties(8, 0.5f, TamgItemTags.PISTOL_BULLETS.tag))
+    public static final ItemEntry<GunItem> REVOLVER = REGISTRATE.item("revolver", GunItem::new)
+            .transform(CGuns.base(8, 0.5, 1.0, 0.3, 0.025, 0.7, 6))
+            .transform(setBulletTag(TamgItemTags.PISTOL_BULLETS.tag))
             .transform(setFlashOffset(0, -0.5, -11))
-            .transform(setThermalProperties(1.0f, 0.9f, 0.05f))
             .transform(setShootVectors(0.375, 0, 1.25, -0.025, 0.0125, 0))
             .transform(withAnimationData(() -> RevolverAnimationData::new))
             .transform(withRenderer(() -> RevolverItemRenderer::new))

@@ -28,6 +28,8 @@ public abstract class GunAnimationData {
         if (old == stack)
             return true;
         var newStack = player.getItemInHand(hand);
+        if(!newStack.is(old.getItem()))
+            return false;
         old = newStack;
         return newStack == stack;
     }
