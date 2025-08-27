@@ -161,7 +161,7 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
                 }
             }
             if(r > 0) {
-                r = Math.max(r - 0.4f, 0);
+                r = Math.max(r - 0.5f, 0);
                 if(r == 0) {
                     tag.remove("R");
                 } else {
@@ -240,7 +240,7 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
 
         if(automatic) {
             var tag = stack.getOrCreateTag();
-            tag.putFloat("R", tag.getFloat("R") + 1.2f);
+            tag.putFloat("R", tag.getFloat("R") + 1.1f);
         }
 
         var trackingUser = PacketDistributor.TRACKING_ENTITY.with(() -> user);
