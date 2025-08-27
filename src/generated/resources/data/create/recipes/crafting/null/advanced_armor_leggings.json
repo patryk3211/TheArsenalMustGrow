@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "tamg:carbon_fibre"
+  },
+  "base": {
+    "item": "tfmg:steel_leggings"
+  },
+  "result": {
+    "item": "tamg:advanced_armor_leggings"
+  },
+  "template": {
+    "item": "minecraft:netherite_upgrade_smithing_template"
+  }
+}

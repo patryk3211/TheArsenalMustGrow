@@ -63,4 +63,8 @@ class R {
     public static ItemLike precisionMechanism() {
         return AllItems.PRECISION_MECHANISM;
     }
+
+    public static ItemLike redCandle() {
+        return Items.RED_CANDLE;
+    }
 }

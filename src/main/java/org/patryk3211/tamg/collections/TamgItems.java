@@ -8,7 +8,7 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
-import org.patryk3211.tamg.armor.Armor;
+import org.patryk3211.tamg.armor.AdvancedArmor;
 import org.patryk3211.tamg.config.CGuns;
 import org.patryk3211.tamg.gun.GunItem;
 import org.patryk3211.tamg.gun.pistol.PistolAnimationData;
@@ -54,18 +54,18 @@ public class TamgItems {
             .register();
 
     public static final ItemEntry<SequencedAssemblyItem>
-            INCOMPLETE_PISTOL = sequenced(PISTOL),
-            INCOMPLETE_REVOLVER = sequenced(REVOLVER),
+            INCOMPLETE_PISTOL = sequencedGun(PISTOL),
+            INCOMPLETE_REVOLVER = sequencedGun(REVOLVER),
             INCOMPLETE_SMALL_BULLET = sequenced(SMALL_BULLET),
             INCOMPLETE_MEDIUM_BULLET = sequenced(MEDIUM_BULLET),
             INCOMPLETE_HEAVY_BULLET = sequenced(HEAVY_BULLET),
             INCOMPLETE_SHOTGUN_SLUG = sequenced(SHOTGUN_SLUG);
 
-    public static final ItemEntry<Armor>
-            ARMOR_HELMET = REGISTRATE.item("armor_helmet", Armor.of(ArmorItem.Type.HELMET)).register(),
-            ARMOR_CHESTPLATE = REGISTRATE.item("armor_chestplate", Armor.of(ArmorItem.Type.CHESTPLATE)).register(),
-            ARMOR_LEGGINGS = REGISTRATE.item("armor_leggings", Armor.of(ArmorItem.Type.LEGGINGS)).register(),
-            ARMOR_BOOTS = REGISTRATE.item("armor_boots", Armor.of(ArmorItem.Type.BOOTS)).register();
+    public static final ItemEntry<AdvancedArmor>
+            ADVANCED_ARMOR_HELMET = REGISTRATE.item("advanced_armor_helmet", AdvancedArmor.of(ArmorItem.Type.HELMET)).register(),
+            ADVANCED_ARMOR_CHESTPLATE = REGISTRATE.item("advanced_armor_chestplate", AdvancedArmor.of(ArmorItem.Type.CHESTPLATE)).register(),
+            ADVANCED_ARMOR_LEGGINGS = REGISTRATE.item("advanced_armor_leggings", AdvancedArmor.of(ArmorItem.Type.LEGGINGS)).register(),
+            ADVANCED_ARMOR_BOOTS = REGISTRATE.item("advanced_armor_boots", AdvancedArmor.of(ArmorItem.Type.BOOTS)).register();
 
     @SafeVarargs
     private static ItemEntry<Item> ingredient(String name, TagKey<Item>... tags) {
@@ -74,6 +74,13 @@ public class TamgItems {
 
     private static ItemEntry<SequencedAssemblyItem> sequenced(ItemEntry<?> complete) {
         return sequenced(complete.getId().getPath());
+    }
+
+    private static ItemEntry<SequencedAssemblyItem> sequencedGun(ItemEntry<?> complete) {
+        return REGISTRATE.item("incomplete_" + complete.getId().getPath(), SequencedAssemblyItem::new)
+                .model((ctx, prov) ->
+                        prov.withExistingParent(ctx.getName(), prov.modLoc("item/" + complete.getId().getPath() + "/base")))
+                .register();
     }
 
     private static ItemEntry<SequencedAssemblyItem> sequenced(String name) {

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "tamg:item/advanced_armor_chestplate"
+  }
+}

@@ -1,6 +1,3 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "tamg:item/incomplete_revolver"
-  }
+  "parent": "tamg:item/revolver/base"
 }

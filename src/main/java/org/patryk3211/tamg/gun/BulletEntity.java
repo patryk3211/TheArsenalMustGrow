@@ -80,10 +80,6 @@ public class BulletEntity extends Projectile {
         var y = this.getY() + velocity.y;
         var z = this.getZ() + velocity.z;
         ProjectileUtil.rotateTowardsMovement(this, 1.0f);
-        if(this.isInWater()) {
-            kill();
-            return;
-        }
 
         setDeltaMovement(getDeltaMovement().add(0, -0.05, 0));
         setPos(x, y, z);

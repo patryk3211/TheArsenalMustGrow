@@ -2,10 +2,14 @@ package org.patryk3211.tamg;
 
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.utility.FilesHelper;
 import com.tterrag.registrate.providers.ProviderType;
+import net.createmod.catnip.lang.FontHelper;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -14,25 +18,26 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.patryk3211.tamg.collections.TamgEntities;
-import org.patryk3211.tamg.collections.TamgItems;
-import org.patryk3211.tamg.collections.TamgParticles;
-import org.patryk3211.tamg.collections.TamgSoundEvents;
+import net.minecraftforge.registries.DeferredRegister;
+import org.patryk3211.tamg.collections.*;
 import org.patryk3211.tamg.config.TamgConfigs;
 import org.patryk3211.tamg.data.CuttingRecipes;
 import org.patryk3211.tamg.data.CompactingRecipes;
 import org.patryk3211.tamg.data.SequencedAssemblyRecipes;
+import org.patryk3211.tamg.data.StandardRecipes;
 import org.slf4j.Logger;
 
 import java.util.function.BiConsumer;
 
 @Mod(Tamg.MOD_ID)
-public class Tamg  {
+public class Tamg {
     public static final String MOD_ID = "tamg";
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public static CreateRegistrate REGISTRATE;
     public static IEventBus modEventBus;
+
+    private static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MOD_ID);
 
     public Tamg(FMLJavaModLoadingContext context) {
         modEventBus = context.getModEventBus();
@@ -40,9 +45,18 @@ public class Tamg  {
         LOGGER.info("Create: The Arsenal Must Grow is loading");
 
         REGISTRATE = CreateRegistrate.create(MOD_ID)
-                .defaultCreativeTab("the_arsenal_must_grow")
-                .build();
+                .setTooltipModifierFactory(item ->
+                        new ItemDescription.Modifier(item, FontHelper.Palette.STANDARD_CREATE)
+                );
         REGISTRATE.registerEventListeners(modEventBus);
+        TABS.register(modEventBus);
+
+        TABS.register("main", () -> CreativeModeTab.builder()
+                .icon(TamgItems.PISTOL::asStack)
+                .displayItems(new ItemDisplay.BaseItemDisplay(true))
+                .title(Component.translatable("itemGroup.tamg.main"))
+                .build());
+        REGISTRATE.addLang("itemGroup", asResource("main"), "The Arsenal Must Grow");
 
         TamgSoundEvents.prepare();
 
@@ -82,6 +96,7 @@ public class Tamg  {
         generator.addProvider(true, new SequencedAssemblyRecipes(pack));
         generator.addProvider(true, new CuttingRecipes(pack));
         generator.addProvider(true, new CompactingRecipes(pack));
+        generator.addProvider(true, new StandardRecipes(pack));
         generator.addProvider(true, TamgSoundEvents.provider(pack));
     }
 

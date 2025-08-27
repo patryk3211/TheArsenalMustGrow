@@ -92,7 +92,22 @@ public class SequencedAssemblyRecipes extends SequencedAssemblyRecipeGen {
             .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.leadNugget()))
             .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.ironNugget()))
             .addStep(PressingRecipe::new, rb -> rb)
-            )
+    ),
+
+    SHOTGUN_SLUG = create("shotgun_slug", b -> b
+            .require(TamgItems.SHOTGUN_SLUG_CASING.get())
+            .addOutput(TamgItems.SHOTGUN_SLUG, 100)
+            .addOutput(AllItems.BRASS_SHEET, 6)
+            .addOutput(Items.GUNPOWDER, 3)
+            .addOutput(TFMGItems.LEAD_NUGGET, 3)
+            .transitionTo(TamgItems.INCOMPLETE_SHOTGUN_SLUG)
+            .loops(1)
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.redCandle()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.gunpowder()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.leadNugget()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.leadNugget()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.leadNugget()))
+    )
             ;
 
     public SequencedAssemblyRecipes(PackOutput output) {

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "tamg:carbon_fibre"
+  },
+  "base": {
+    "item": "tfmg:steel_helmet"
+  },
+  "result": {
+    "item": "tamg:advanced_armor_helmet"
+  },
+  "template": {
+    "item": "minecraft:netherite_upgrade_smithing_template"
+  }
+}

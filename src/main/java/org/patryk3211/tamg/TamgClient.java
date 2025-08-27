@@ -26,6 +26,7 @@ public class TamgClient {
     public static void clientTick(TickEvent.ClientTickEvent event) {
         if(event.phase == TickEvent.Phase.END) {
             GUN_RENDER_HANDLER.tick();
+//            RiotArmorFirstPersonRenderer.clientTick();
         }
     }
 

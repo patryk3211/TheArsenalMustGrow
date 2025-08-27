@@ -1,0 +1,110 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "tamg:slug_casing"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "chance": 100.0,
+      "item": "tamg:shotgun_slug"
+    },
+    {
+      "chance": 6.0,
+      "item": "create:brass_sheet"
+    },
+    {
+      "chance": 3.0,
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "chance": 3.0,
+      "item": "tfmg:lead_nugget"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_shotgun_slug"
+        },
+        {
+          "item": "minecraft:red_candle"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_shotgun_slug"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_shotgun_slug"
+        },
+        {
+          "item": "minecraft:gunpowder"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_shotgun_slug"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_shotgun_slug"
+        },
+        {
+          "item": "tfmg:lead_nugget"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_shotgun_slug"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_shotgun_slug"
+        },
+        {
+          "item": "tfmg:lead_nugget"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_shotgun_slug"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_shotgun_slug"
+        },
+        {
+          "item": "tfmg:lead_nugget"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_shotgun_slug"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "tamg:incomplete_shotgun_slug"
+  }
+}

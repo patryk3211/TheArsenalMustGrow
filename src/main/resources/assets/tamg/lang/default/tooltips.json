@@ -13,5 +13,10 @@
   "item.tamg.revolver.tooltip.condition1": "When R-Clicked",
   "item.tamg.revolver.tooltip.behaviour1": "Fires a _heavy bullet_ from your inventory and produces _heat_ up to the weapon's maximum capacity",
   "item.tamg.revolver.tooltip.condition2": "When Overheating",
-  "item.tamg.revolver.tooltip.behaviour2": "The gun will be _unusable_ for a few seconds"
+  "item.tamg.revolver.tooltip.behaviour2": "The gun will be _unusable_ for a few seconds",
+
+  "item.tamg.advanced_armor_helmet.tooltip.summary": "The pinnacle of defense technology and fashion, provides _Projectile Protection I_ and _Protection I_ to the wearer",
+  "item.tamg.advanced_armor_chestplate.tooltip.summary": "The pinnacle of defense technology and fashion, provides _Projectile Protection I_ and _Protection I_ to the wearer",
+  "item.tamg.advanced_armor_leggings.tooltip.summary": "The pinnacle of defense technology and fashion, provides _Projectile Protection I_ and _Protection I_ to the wearer",
+  "item.tamg.advanced_armor_boots.tooltip.summary": "The pinnacle of defense technology and fashion, provides _Projectile Protection I_ and _Protection I_ to the wearer"
 }
