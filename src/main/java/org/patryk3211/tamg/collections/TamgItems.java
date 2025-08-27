@@ -1,5 +1,6 @@
 package org.patryk3211.tamg.collections;
 
+import com.simibubi.create.AllTags;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateItemModelProvider;
@@ -23,15 +24,15 @@ import static org.patryk3211.tamg.gun.GunProperties.*;
 
 public class TamgItems {
     public static final ItemEntry<Item>
-            SMALL_BULLET_CASING = ingredient("small_casing"),
-            MEDIUM_BULLET_CASING = ingredient("medium_casing"),
-            HEAVY_BULLET_CASING = ingredient("heavy_casing"),
-            SHOTGUN_SLUG_CASING = ingredient("slug_casing"),
+            SMALL_BULLET_CASING = ingredient("small_casing", AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
+            MEDIUM_BULLET_CASING = ingredient("medium_casing", AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
+            HEAVY_BULLET_CASING = ingredient("heavy_casing", AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
+            SHOTGUN_SLUG_CASING = ingredient("slug_casing", AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
 
-            SMALL_BULLET = ingredient("small_bullet", TamgItemTags.PISTOL_BULLETS.tag),
-            MEDIUM_BULLET = ingredient("medium_bullet", TamgItemTags.ASSAULT_RIFLE_BULLETS.tag),
-            HEAVY_BULLET = ingredient("heavy_bullet", TamgItemTags.REVOLVER_BULLETS.tag),
-            SHOTGUN_SLUG = ingredient("shotgun_slug");
+            SMALL_BULLET = ingredient("small_bullet", TamgItemTags.PISTOL_BULLETS.tag, AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
+            MEDIUM_BULLET = ingredient("medium_bullet", TamgItemTags.ASSAULT_RIFLE_BULLETS.tag, AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
+            HEAVY_BULLET = ingredient("heavy_bullet", TamgItemTags.REVOLVER_BULLETS.tag, AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
+            SHOTGUN_SLUG = ingredient("shotgun_slug", AllTags.AllItemTags.UPRIGHT_ON_BELT.tag);
 
     public static final ItemEntry<Item> CARBON_FIBRE = ingredient("carbon_fibre");
 
@@ -69,10 +70,10 @@ public class TamgItems {
             INCOMPLETE_PISTOL = sequencedGun(PISTOL),
             INCOMPLETE_REVOLVER = sequencedGun(REVOLVER),
             INCOMPLETE_ASSAULT_RIFLE = sequencedGunCustomModel(ASSAULT_RIFLE),
-            INCOMPLETE_SMALL_BULLET = sequenced(SMALL_BULLET),
-            INCOMPLETE_MEDIUM_BULLET = sequenced(MEDIUM_BULLET),
-            INCOMPLETE_HEAVY_BULLET = sequenced(HEAVY_BULLET),
-            INCOMPLETE_SHOTGUN_SLUG = sequenced(SHOTGUN_SLUG);
+            INCOMPLETE_SMALL_BULLET = sequenced(SMALL_BULLET, AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
+            INCOMPLETE_MEDIUM_BULLET = sequenced(MEDIUM_BULLET, AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
+            INCOMPLETE_HEAVY_BULLET = sequenced(HEAVY_BULLET, AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
+            INCOMPLETE_SHOTGUN_SLUG = sequenced(SHOTGUN_SLUG, AllTags.AllItemTags.UPRIGHT_ON_BELT.tag);
 
     public static final ItemEntry<AdvancedArmor>
             ADVANCED_ARMOR_HELMET = REGISTRATE.item("advanced_armor_helmet", AdvancedArmor.of(ArmorItem.Type.HELMET)).register(),
@@ -85,8 +86,9 @@ public class TamgItems {
         return REGISTRATE.item(name, Item::new).tag(tags).register();
     }
 
-    private static ItemEntry<SequencedAssemblyItem> sequenced(ItemEntry<?> complete) {
-        return sequenced(complete.getId().getPath());
+    @SafeVarargs
+    private static ItemEntry<SequencedAssemblyItem> sequenced(ItemEntry<?> complete, TagKey<Item>... tags) {
+        return sequenced(complete.getId().getPath(), tags);
     }
 
     private static ItemEntry<SequencedAssemblyItem> sequencedGun(ItemEntry<?> complete) {
@@ -103,8 +105,9 @@ public class TamgItems {
                 .register();
     }
 
-    private static ItemEntry<SequencedAssemblyItem> sequenced(String name) {
-        return REGISTRATE.item("incomplete_" + name, SequencedAssemblyItem::new).register();
+    @SafeVarargs
+    private static ItemEntry<SequencedAssemblyItem> sequenced(String name, TagKey<Item>... tags) {
+        return REGISTRATE.item("incomplete_" + name, SequencedAssemblyItem::new).tag(tags).register();
     }
 
     public static void register() { /* Initialize static fields */ }

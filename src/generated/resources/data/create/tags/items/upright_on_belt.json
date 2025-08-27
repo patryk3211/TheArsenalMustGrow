@@ -1,0 +1,16 @@
+{
+  "values": [
+    "tamg:small_casing",
+    "tamg:medium_casing",
+    "tamg:heavy_casing",
+    "tamg:slug_casing",
+    "tamg:small_bullet",
+    "tamg:medium_bullet",
+    "tamg:heavy_bullet",
+    "tamg:shotgun_slug",
+    "tamg:incomplete_small_bullet",
+    "tamg:incomplete_medium_bullet",
+    "tamg:incomplete_heavy_bullet",
+    "tamg:incomplete_shotgun_slug"
+  ]
+}
