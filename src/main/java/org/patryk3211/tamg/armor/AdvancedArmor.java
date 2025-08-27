@@ -17,6 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
@@ -42,19 +43,20 @@ public class AdvancedArmor extends BaseArmorItem implements LayeredArmorItem {
     }
 
     @Override
-    public void onCraftedBy(ItemStack pStack, Level pLevel, Player pPlayer) {
-        super.onCraftedBy(pStack, pLevel, pPlayer);
-        pStack.enchant(Enchantments.PROJECTILE_PROTECTION, 1);
-        pStack.enchant(Enchantments.ALL_DAMAGE_PROTECTION, 1);
+    public int getEnchantmentLevel(ItemStack stack, Enchantment enchantment) {
+        int base = super.getEnchantmentLevel(stack, enchantment);
+        if(enchantment == Enchantments.PROJECTILE_PROTECTION || enchantment == Enchantments.ALL_DAMAGE_PROTECTION) {
+            return Math.max(base, 1);
+        }
+        return base;
     }
 
     @Override
-    @NotNull
-    public ItemStack getDefaultInstance() {
-        var stack = super.getDefaultInstance();
-        stack.enchant(Enchantments.PROJECTILE_PROTECTION, 1);
-        stack.enchant(Enchantments.ALL_DAMAGE_PROTECTION, 1);
-        return stack;
+    public Map<Enchantment, Integer> getAllEnchantments(ItemStack stack) {
+        var map = super.getAllEnchantments(stack);
+        map.compute(Enchantments.PROJECTILE_PROTECTION, (e, c) -> c == null ? 1 : Math.max(c, 1));
+        map.compute(Enchantments.ALL_DAMAGE_PROTECTION, (e, c) -> c == null ? 1 : Math.max(c, 1));
+        return map;
     }
 
     @Override

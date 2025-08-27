@@ -50,6 +50,23 @@ public class SequencedAssemblyRecipes extends SequencedAssemblyRecipeGen {
             .addStep(FillingRecipe::new, rb -> rb.require(TFMGFluids.LUBRICATION_OIL.get(), 250))
     ),
 
+    ASSAULT_RIFLE = create("assault_rifle", b -> b
+            .require(TamgItems.PISTOL)
+            .addOutput(TamgItems.ASSAULT_RIFLE, 100)
+            .addOutput(TFMGItems.STEEL_MECHANISM, 5)
+            .addOutput(TFMGItems.STEEL_INGOT, 5)
+            .addOutput(TFMGItems.SCREW, 3)
+            .transitionTo(TamgItems.INCOMPLETE_ASSAULT_RIFLE)
+            .loops(1)
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.heavyPlate()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.steelMechanism()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.steelMechanism()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.carbonFibre()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.screws()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.screwDriver()).toolNotConsumed())
+            .addStep(FillingRecipe::new, rb -> rb.require(TFMGFluids.LUBRICATION_OIL.get(), 250))
+    ),
+
     SMALL_BULLET = create("small_bullet", b -> b
             .require(TamgItems.SMALL_BULLET_CASING.get())
             .addOutput(TamgItems.SMALL_BULLET, 100)

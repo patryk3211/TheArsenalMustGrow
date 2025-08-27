@@ -6,7 +6,7 @@
         "items": [
           {
             "items": [
-              "tfmg:steel_helmet"
+              "tfmg:steel_boots"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "create:crafting/null/advanced_armor_helmet"
+        "recipe": "tamg:crafting/all/advanced_armor_boots"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "create:crafting/null/advanced_armor_helmet"
+      "tamg:crafting/all/advanced_armor_boots"
     ]
   },
   "sends_telemetry_event": false

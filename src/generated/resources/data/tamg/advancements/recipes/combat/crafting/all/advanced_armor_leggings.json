@@ -6,7 +6,7 @@
         "items": [
           {
             "items": [
-              "tfmg:steel_chestplate"
+              "tfmg:steel_leggings"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "create:crafting/null/advanced_armor_chestplate"
+        "recipe": "tamg:crafting/all/advanced_armor_leggings"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "create:crafting/null/advanced_armor_chestplate"
+      "tamg:crafting/all/advanced_armor_leggings"
     ]
   },
   "sends_telemetry_event": false

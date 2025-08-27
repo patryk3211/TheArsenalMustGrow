@@ -40,6 +40,8 @@ import java.util.function.UnaryOperator;
 
 @SuppressWarnings("unused")
 public class StandardRecipes extends BaseRecipeProvider {
+    private String currentFolder = "all";
+
     private final GeneratedRecipe
 
     ADVANCED_HELMET = create(TamgItems.ADVANCED_ARMOR_HELMET)
@@ -57,8 +59,6 @@ public class StandardRecipes extends BaseRecipeProvider {
     public StandardRecipes(PackOutput output) {
         super(output, Tamg.MOD_ID);
     }
-
-    private String currentFolder = "all";
 
     GeneratedRecipeBuilder create(Supplier<ItemLike> result) {
         return new GeneratedRecipeBuilder(currentFolder, result);

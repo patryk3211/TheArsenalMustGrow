@@ -11,6 +11,8 @@ import net.minecraft.world.item.Item;
 import org.patryk3211.tamg.armor.AdvancedArmor;
 import org.patryk3211.tamg.config.CGuns;
 import org.patryk3211.tamg.gun.GunItem;
+import org.patryk3211.tamg.gun.assaultrifle.AssaultRifleAnimationData;
+import org.patryk3211.tamg.gun.assaultrifle.AssaultRifleItemRenderer;
 import org.patryk3211.tamg.gun.pistol.PistolAnimationData;
 import org.patryk3211.tamg.gun.pistol.PistolItemRenderer;
 import org.patryk3211.tamg.gun.revolver.RevolverAnimationData;
@@ -27,7 +29,7 @@ public class TamgItems {
             SHOTGUN_SLUG_CASING = ingredient("slug_casing"),
 
             SMALL_BULLET = ingredient("small_bullet", TamgItemTags.PISTOL_BULLETS.tag),
-            MEDIUM_BULLET = ingredient("medium_bullet"),
+            MEDIUM_BULLET = ingredient("medium_bullet", TamgItemTags.ASSAULT_RIFLE_BULLETS.tag),
             HEAVY_BULLET = ingredient("heavy_bullet", TamgItemTags.REVOLVER_BULLETS.tag),
             SHOTGUN_SLUG = ingredient("shotgun_slug");
 
@@ -53,9 +55,20 @@ public class TamgItems {
             .model(gunBaseModel())
             .register();
 
+    public static final ItemEntry<GunItem> ASSAULT_RIFLE = REGISTRATE.item("assault_rifle", p -> new GunItem(p, true))
+            .transform(CGuns.base(4, 0, 1.0, 0.2, 0.05, 0.05, 0))
+            .transform(setBulletTag(TamgItemTags.ASSAULT_RIFLE_BULLETS.tag))
+            .transform(setFlashOffset(0, -0.5, -16))
+            .transform(setShootVectors(0.375, -0.2, 1.25, -0.025, 0.0125, 0))
+            .transform(withAnimationData(() -> AssaultRifleAnimationData::new))
+            .transform(withRenderer(() -> AssaultRifleItemRenderer::new))
+            .model(gunBaseModel())
+            .register();
+
     public static final ItemEntry<SequencedAssemblyItem>
             INCOMPLETE_PISTOL = sequencedGun(PISTOL),
             INCOMPLETE_REVOLVER = sequencedGun(REVOLVER),
+            INCOMPLETE_ASSAULT_RIFLE = sequencedGunCustomModel(ASSAULT_RIFLE),
             INCOMPLETE_SMALL_BULLET = sequenced(SMALL_BULLET),
             INCOMPLETE_MEDIUM_BULLET = sequenced(MEDIUM_BULLET),
             INCOMPLETE_HEAVY_BULLET = sequenced(HEAVY_BULLET),
@@ -80,6 +93,13 @@ public class TamgItems {
         return REGISTRATE.item("incomplete_" + complete.getId().getPath(), SequencedAssemblyItem::new)
                 .model((ctx, prov) ->
                         prov.withExistingParent(ctx.getName(), prov.modLoc("item/" + complete.getId().getPath() + "/base")))
+                .register();
+    }
+
+    private static ItemEntry<SequencedAssemblyItem> sequencedGunCustomModel(ItemEntry<?> complete) {
+        return REGISTRATE.item("incomplete_" + complete.getId().getPath(), SequencedAssemblyItem::new)
+                .model((ctx, prov) ->
+                        prov.withExistingParent(ctx.getName(), prov.modLoc("item/" + complete.getId().getPath() + "/unfinished")))
                 .register();
     }
 

@@ -1,0 +1,145 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "tamg:pistol"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "chance": 100.0,
+      "item": "tamg:assault_rifle"
+    },
+    {
+      "chance": 5.0,
+      "item": "tfmg:steel_mechanism"
+    },
+    {
+      "chance": 5.0,
+      "item": "tfmg:steel_ingot"
+    },
+    {
+      "chance": 3.0,
+      "item": "tfmg:screw"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_assault_rifle"
+        },
+        {
+          "item": "tfmg:heavy_plate"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_assault_rifle"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_assault_rifle"
+        },
+        {
+          "item": "tfmg:steel_mechanism"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_assault_rifle"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_assault_rifle"
+        },
+        {
+          "item": "tfmg:steel_mechanism"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_assault_rifle"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_assault_rifle"
+        },
+        {
+          "item": "tamg:carbon_fibre"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_assault_rifle"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_assault_rifle"
+        },
+        {
+          "item": "tfmg:screw"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_assault_rifle"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_assault_rifle"
+        },
+        {
+          "item": "tfmg:screwdriver"
+        }
+      ],
+      "keepHeldItem": true,
+      "results": [
+        {
+          "item": "tamg:incomplete_assault_rifle"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_assault_rifle"
+        },
+        {
+          "amount": 250,
+          "fluid": "tfmg:lubrication_oil",
+          "nbt": {}
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_assault_rifle"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "tamg:incomplete_assault_rifle"
+  }
+}

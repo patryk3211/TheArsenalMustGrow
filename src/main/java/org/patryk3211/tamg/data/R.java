@@ -67,4 +67,8 @@ class R {
     public static ItemLike redCandle() {
         return Items.RED_CANDLE;
     }
+
+    public static ItemLike heavyPlate() {
+        return TFMGItems.HEAVY_PLATE;
+    }
 }

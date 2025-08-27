@@ -45,6 +45,7 @@ import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import org.patryk3211.tamg.Lang;
 import org.patryk3211.tamg.Networking;
+import org.patryk3211.tamg.Tamg;
 import org.patryk3211.tamg.TamgClient;
 import org.patryk3211.tamg.config.CGuns;
 import org.patryk3211.tamg.config.TamgConfigs;
@@ -59,13 +60,8 @@ import static org.patryk3211.tamg.config.CGuns.GunProperties.*;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
-//    protected float damage = 2;
-//    protected float knockback = 0.1f;
     // Remember to set this for every new gun instance.
     protected TagKey<Item> bulletTag = null;
-//    protected float heatCapacity = 1;
-//    protected float heatPerShot = 0.5f;
-//    protected float heatDissipation = 0.1f;
 
     protected Vec3 flashOffset = Vec3.ZERO;
     protected Vec3 barrel = Vec3.ZERO;
@@ -74,8 +70,15 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
     public static final int COLOR_BAR_EMPTY = 0xfffc6703;
     public static final int COLOR_BAR_FULL = 0xfffc2003;
 
+    private final boolean automatic;
+
     public GunItem(Properties settings) {
+        this(settings, false);
+    }
+
+    public GunItem(Properties settings, boolean automatic) {
         super(settings.stacksTo(1));
+        this.automatic = automatic;
     }
 
     public float configF(CGuns.GunProperties property) {
@@ -147,10 +150,29 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         super.inventoryTick(stack, level, entity, slotId, isSelected);
+        var tag = stack.getOrCreateTag();
+        if(automatic) {
+            float r = tag.getFloat("R");
+            if (!level.isClientSide && r >= 0.5f && r < 1.0f && entity instanceof Player user) {
+                if (user.getMainHandItem() == stack) {
+                    use(level, user, InteractionHand.MAIN_HAND);
+                } else if (user.getOffhandItem() == stack) {
+                    use(level, user, InteractionHand.OFF_HAND);
+                }
+            }
+            if(r > 0) {
+                r = Math.max(r - 0.4f, 0);
+                if(r == 0) {
+                    tag.remove("R");
+                } else {
+                    tag.putFloat("R", r);
+                }
+            }
+        }
         var current = getHeatAmount(stack);
         if(current <= 0)
             return;
-        stack.getOrCreateTag().putFloat("Heat", Math.max(current - configF(HEAT_DISSIPATION), 0));
+        tag.putFloat("Heat", Math.max(current - configF(HEAT_DISSIPATION), 0));
     }
 
     @Override
@@ -182,7 +204,7 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
 
         var barrelPos = ShootableGadgetItemMethods.getGunBarrelVec(user, hand == InteractionHand.MAIN_HAND,
                 this.barrel
-//                new Vec3(.375f, -.15f, 1.25f)
+//                new Vec3(.375f, -.20f, 1.25f)
         );
         var correction = ShootableGadgetItemMethods.getGunBarrelVec(user, hand == InteractionHand.MAIN_HAND,
                 this.correction
@@ -216,11 +238,16 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
         if(cooldown > 0)
             cooldownIfNotCoolingDown(user, cooldown);
 
+        if(automatic) {
+            var tag = stack.getOrCreateTag();
+            tag.putFloat("R", tag.getFloat("R") + 1.2f);
+        }
+
         var trackingUser = PacketDistributor.TRACKING_ENTITY.with(() -> user);
         var userDist = PacketDistributor.PLAYER.with(() -> (ServerPlayer) user);
         Networking.getChannel().send(trackingUser, factory.apply(false));
         Networking.getChannel().send(userDist, factory.apply(true));
-        return InteractionResultHolder.success(user.getItemInHand(hand));
+        return InteractionResultHolder.success(stack);
     }
 
     @Override
