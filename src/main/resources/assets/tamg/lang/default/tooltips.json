@@ -1,5 +1,17 @@
 {
   "tamg.gun.bullet": "Bullet",
   "tamg.gun.bullet.damage": "%1$s Attack Damage",
-  "tamg.gun.bullet.knockback": "%1$s Knockback"
+  "tamg.gun.bullet.knockback": "%1$s Knockback",
+
+  "item.tamg.pistol.tooltip.summary": "A small and compact source of _firepower_",
+  "item.tamg.pistol.tooltip.condition1": "When R-Clicked",
+  "item.tamg.pistol.tooltip.behaviour1": "Fires a _small bullet_ from your inventory and produces _heat_ up to the weapon's maximum capacity",
+  "item.tamg.pistol.tooltip.condition2": "When Overheating",
+  "item.tamg.pistol.tooltip.behaviour2": "The gun will be _unusable_ for a few seconds",
+
+  "item.tamg.revolver.tooltip.summary": "Its powerful shots _propel_ you in the _opposite_ direction of your target, Do _trickshots_!",
+  "item.tamg.revolver.tooltip.condition1": "When R-Clicked",
+  "item.tamg.revolver.tooltip.behaviour1": "Fires a _heavy bullet_ from your inventory and produces _heat_ up to the weapon's maximum capacity",
+  "item.tamg.revolver.tooltip.condition2": "When Overheating",
+  "item.tamg.revolver.tooltip.behaviour2": "The gun will be _unusable_ for a few seconds"
 }

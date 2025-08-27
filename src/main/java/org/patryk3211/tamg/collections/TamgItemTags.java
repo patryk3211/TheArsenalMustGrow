@@ -9,6 +9,7 @@ import org.patryk3211.tamg.Tamg;
 
 public enum TamgItemTags {
     PISTOL_BULLETS,
+    REVOLVER_BULLETS,
     ;
 
     public final TagKey<Item> tag;

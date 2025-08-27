@@ -28,13 +28,13 @@ public class TamgItems {
 
             SMALL_BULLET = ingredient("small_bullet", TamgItemTags.PISTOL_BULLETS.tag),
             MEDIUM_BULLET = ingredient("medium_bullet"),
-            HEAVY_BULLET = ingredient("heavy_bullet"),
+            HEAVY_BULLET = ingredient("heavy_bullet", TamgItemTags.REVOLVER_BULLETS.tag),
             SHOTGUN_SLUG = ingredient("shotgun_slug");
 
     public static final ItemEntry<Item> CARBON_FIBRE = ingredient("carbon_fibre");
 
     public static final ItemEntry<GunItem> PISTOL = REGISTRATE.item("pistol", GunItem::new)
-            .transform(CGuns.base(4, 0, 1.0, 0.5, 0.1, 0, 0))
+            .transform(CGuns.base(5.3, 0, 1.3, 0.5, 0.1, 0, 0))
             .transform(setBulletTag(TamgItemTags.PISTOL_BULLETS.tag))
             .transform(setFlashOffset(0, -2.5, -4))
             .transform(setShootVectors(0.375, -0.15, 1.0, -0.025, 0.0125, 0))
@@ -44,8 +44,8 @@ public class TamgItems {
             .register();
 
     public static final ItemEntry<GunItem> REVOLVER = REGISTRATE.item("revolver", GunItem::new)
-            .transform(CGuns.base(8, 0.5, 1.0, 0.3, 0.025, 0.7, 6))
-            .transform(setBulletTag(TamgItemTags.PISTOL_BULLETS.tag))
+            .transform(CGuns.base(10, 0.5, 1.0, 0.6, 0.025, 0.7, 6))
+            .transform(setBulletTag(TamgItemTags.REVOLVER_BULLETS.tag))
             .transform(setFlashOffset(0, -0.5, -11))
             .transform(setShootVectors(0.375, 0, 1.25, -0.025, 0.0125, 0))
             .transform(withAnimationData(() -> RevolverAnimationData::new))
