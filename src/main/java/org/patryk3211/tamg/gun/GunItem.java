@@ -45,7 +45,6 @@ import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import org.patryk3211.tamg.Lang;
 import org.patryk3211.tamg.Networking;
-import org.patryk3211.tamg.Tamg;
 import org.patryk3211.tamg.TamgClient;
 import org.patryk3211.tamg.config.CGuns;
 import org.patryk3211.tamg.config.TamgConfigs;
@@ -151,24 +150,6 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         super.inventoryTick(stack, level, entity, slotId, isSelected);
         var tag = stack.getOrCreateTag();
-        if(automatic) {
-            float r = tag.getFloat("R");
-            if (!level.isClientSide && r >= 0.5f && r < 1.0f && entity instanceof Player user) {
-                if (user.getMainHandItem() == stack) {
-                    use(level, user, InteractionHand.MAIN_HAND);
-                } else if (user.getOffhandItem() == stack) {
-                    use(level, user, InteractionHand.OFF_HAND);
-                }
-            }
-            if(r > 0) {
-                r = Math.max(r - 0.5f, 0);
-                if(r == 0) {
-                    tag.remove("R");
-                } else {
-                    tag.putFloat("R", r);
-                }
-            }
-        }
         var current = getHeatAmount(stack);
         if(current <= 0)
             return;
@@ -188,17 +169,10 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
         player.getCooldowns().addCooldown(this, ticks);
     }
 
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-        var stack = user.getItemInHand(hand);
-        if(world.isClientSide) {
-            TamgClient.GUN_RENDER_HANDLER.dontAnimateItem(hand);
-            return InteractionResultHolder.success(stack);
-        }
-
+    protected InteractionResult shoot(Level world, Player user, ItemStack stack, InteractionHand hand) {
         var projectile = user.getProjectile(stack);
         if(projectile.isEmpty())
-            return InteractionResultHolder.fail(stack);
+            return InteractionResult.FAIL;
         if(!user.isCreative())
             projectile.shrink(1);
 
@@ -223,6 +197,8 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
         if(applyHeat(stack)) {
             // Overheated
             ShootableGadgetItemMethods.applyCooldown(user, stack, hand, this::isGun, 20 * 5);
+            if(automatic)
+                user.stopUsingItem();
         }
         Function<Boolean, GunS2CPacket> factory = b -> new GunS2CPacket(barrelPos, hand, b, user);
 
@@ -238,16 +214,44 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
         if(cooldown > 0)
             cooldownIfNotCoolingDown(user, cooldown);
 
-        if(automatic) {
-            var tag = stack.getOrCreateTag();
-            tag.putFloat("R", tag.getFloat("R") + 1.1f);
-        }
-
         var trackingUser = PacketDistributor.TRACKING_ENTITY.with(() -> user);
         var userDist = PacketDistributor.PLAYER.with(() -> (ServerPlayer) user);
         Networking.getChannel().send(trackingUser, factory.apply(false));
         Networking.getChannel().send(userDist, factory.apply(true));
-        return InteractionResultHolder.success(stack);
+        return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+        var stack = user.getItemInHand(hand);
+        if(world.isClientSide) {
+            TamgClient.GUN_RENDER_HANDLER.dontAnimateItem(hand);
+            return InteractionResultHolder.success(stack);
+        }
+
+        if(automatic) {
+            user.startUsingItem(hand);
+            return InteractionResultHolder.success(stack);
+        }
+
+        return new InteractionResultHolder<>(shoot(world, user, stack, hand), stack);
+    }
+
+    @Override
+    public int getUseDuration(ItemStack pStack) {
+        return 72000;
+    }
+
+    @Override
+    public void onUseTick(Level world, LivingEntity user, ItemStack stack, int pRemainingUseDuration) {
+        if(world.isClientSide)
+            return;
+        if(!(user instanceof Player player))
+            return;
+        if(pRemainingUseDuration % 2 == 0) {
+            var hand = user.getMainHandItem() == stack ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+            shoot(world, player, stack, hand);
+        }
     }
 
     @Override
