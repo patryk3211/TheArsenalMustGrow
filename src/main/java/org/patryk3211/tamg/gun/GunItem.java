@@ -134,6 +134,14 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
         return Color.mixColors(COLOR_BAR_EMPTY, COLOR_BAR_FULL, getHeatPercent(stack));
     }
 
+    public Vec3 getBarrel(ItemStack stack) {
+        return barrel;
+    }
+
+    public Vec3 getCorrection(ItemStack stack) {
+        return correction;
+    }
+
     public boolean applyHeat(ItemStack stack) {
         if(stack.getItem() != this)
             throw new IllegalArgumentException("Stack must be of the correct item");
@@ -177,11 +185,11 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
             projectile.shrink(1);
 
         var barrelPos = ShootableGadgetItemMethods.getGunBarrelVec(user, hand == InteractionHand.MAIN_HAND,
-                this.barrel
+                getBarrel(stack)
 //                new Vec3(.375f, -.20f, 1.25f)
         );
         var correction = ShootableGadgetItemMethods.getGunBarrelVec(user, hand == InteractionHand.MAIN_HAND,
-                this.correction
+                getCorrection(stack)
 //                new Vec3(-0.025f, 0.0125f, 0)
         ).subtract(user.position().add(0, user.getEyeHeight(), 0));
 
@@ -244,7 +252,7 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
 
     @Override
     public void onUseTick(Level world, LivingEntity user, ItemStack stack, int pRemainingUseDuration) {
-        if(world.isClientSide)
+        if(world.isClientSide || !automatic)
             return;
         if(!(user instanceof Player player))
             return;
@@ -289,5 +297,9 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
 
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return slotChanged || newStack.getItem() != oldStack.getItem();
+    }
+
+    public InteractionResult onLeftClick(Player player, ItemStack stack, InteractionHand hand) {
+        return InteractionResult.PASS;
     }
 }

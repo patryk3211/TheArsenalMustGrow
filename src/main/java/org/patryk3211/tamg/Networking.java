@@ -8,6 +8,7 @@ import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import org.patryk3211.tamg.gun.GunS2CPacket;
+import org.patryk3211.tamg.gun.ZoomC2SPacket;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -44,6 +45,7 @@ public class Networking {
                 .simpleChannel();
 
         registerPacket(GunS2CPacket.class, GunS2CPacket::new, NetworkDirection.PLAY_TO_CLIENT);
+        registerPacket(ZoomC2SPacket.class, ZoomC2SPacket::new, NetworkDirection.PLAY_TO_SERVER);
     }
 
     public static SimpleChannel getChannel() {

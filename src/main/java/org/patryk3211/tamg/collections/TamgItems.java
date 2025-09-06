@@ -12,12 +12,13 @@ import net.minecraft.world.item.Item;
 import org.patryk3211.tamg.armor.AdvancedArmor;
 import org.patryk3211.tamg.config.CGuns;
 import org.patryk3211.tamg.gun.GunItem;
-import org.patryk3211.tamg.gun.assaultrifle.AssaultRifleAnimationData;
-import org.patryk3211.tamg.gun.assaultrifle.AssaultRifleItemRenderer;
+import org.patryk3211.tamg.gun.EmptyAnimationData;
+import org.patryk3211.tamg.gun.SimpleGunItemRenderer;
 import org.patryk3211.tamg.gun.pistol.PistolAnimationData;
 import org.patryk3211.tamg.gun.pistol.PistolItemRenderer;
 import org.patryk3211.tamg.gun.revolver.RevolverAnimationData;
 import org.patryk3211.tamg.gun.revolver.RevolverItemRenderer;
+import org.patryk3211.tamg.gun.sniper.SniperRifleItem;
 
 import static org.patryk3211.tamg.Tamg.REGISTRATE;
 import static org.patryk3211.tamg.gun.GunProperties.*;
@@ -29,10 +30,18 @@ public class TamgItems {
             HEAVY_BULLET_CASING = ingredient("heavy_casing", AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
             SHOTGUN_SLUG_CASING = ingredient("slug_casing", AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
 
-            SMALL_BULLET = ingredient("small_bullet", TamgItemTags.PISTOL_BULLETS.tag, AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
-            MEDIUM_BULLET = ingredient("medium_bullet", TamgItemTags.ASSAULT_RIFLE_BULLETS.tag, AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
-            HEAVY_BULLET = ingredient("heavy_bullet", TamgItemTags.REVOLVER_BULLETS.tag, AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
-            SHOTGUN_SLUG = ingredient("shotgun_slug", AllTags.AllItemTags.UPRIGHT_ON_BELT.tag);
+            SMALL_BULLET = ingredient("small_bullet",
+                    TamgItemTags.PISTOL_BULLETS.tag,
+                    AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
+            MEDIUM_BULLET = ingredient("medium_bullet",
+                    TamgItemTags.ASSAULT_RIFLE_BULLETS.tag,
+                    AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
+            HEAVY_BULLET = ingredient("heavy_bullet",
+                    TamgItemTags.REVOLVER_BULLETS.tag,
+                    TamgItemTags.SNIPER_RIFLE_BULLETS.tag,
+                    AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
+            SHOTGUN_SLUG = ingredient("shotgun_slug",
+                    AllTags.AllItemTags.UPRIGHT_ON_BELT.tag);
 
     public static final ItemEntry<Item> CARBON_FIBRE = ingredient("carbon_fibre");
 
@@ -61,8 +70,18 @@ public class TamgItems {
             .transform(setBulletTag(TamgItemTags.ASSAULT_RIFLE_BULLETS.tag))
             .transform(setFlashOffset(0, -0.5, -16))
             .transform(setShootVectors(0.375, -0.2, 1.25, -0.025, 0.0125, 0))
-            .transform(withAnimationData(() -> AssaultRifleAnimationData::new))
-            .transform(withRenderer(() -> AssaultRifleItemRenderer::new))
+            .transform(withAnimationData(() -> EmptyAnimationData::new))
+            .transform(withRenderer(() -> SimpleGunItemRenderer::new))
+            .model(gunBaseModel())
+            .register();
+
+    public static final ItemEntry<SniperRifleItem> SNIPER_RIFLE = REGISTRATE.item("sniper_rifle", SniperRifleItem::new)
+            .transform(CGuns.base(16, 0.5, 1.0, 1.1, 0.025, 0.0, 0))
+            .transform(setBulletTag(TamgItemTags.SNIPER_RIFLE_BULLETS.tag))
+            .transform(setFlashOffset(0, -3.5, -21))
+            .transform(setShootVectors(0.375, -0.2, 1.25, -0.025, 0.0125, 0))
+            .transform(withAnimationData(() -> EmptyAnimationData::new))
+            .transform(withRenderer(() -> SimpleGunItemRenderer::new))
             .model(gunBaseModel())
             .register();
 

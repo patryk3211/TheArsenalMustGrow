@@ -11,7 +11,7 @@ public enum TamgItemTags {
     PISTOL_BULLETS,
     REVOLVER_BULLETS,
     ASSAULT_RIFLE_BULLETS,
-    ;
+    SNIPER_RIFLE_BULLETS;
 
     public final TagKey<Item> tag;
 
