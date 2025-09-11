@@ -177,6 +177,12 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
         player.getCooldowns().addCooldown(this, ticks);
     }
 
+    protected void spawnProjectile(Level world, Vec3 barrelPos, Vec3 motion, Player user, ItemStack stack) {
+        var projectileEntity = BulletEntity.create(world, barrelPos, motion, this);
+        projectileEntity.setOwner(user);
+        world.addFreshEntity(projectileEntity);
+    }
+
     protected InteractionResult shoot(Level world, Player user, ItemStack stack, InteractionHand hand) {
         var projectile = user.getProjectile(stack);
         if(projectile.isEmpty())
@@ -198,9 +204,7 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
                 .normalize()
                 .scale(4);
 
-        var projectileEntity = BulletEntity.create(world, barrelPos, motion, this);
-        projectileEntity.setOwner(user);
-        world.addFreshEntity(projectileEntity);
+        spawnProjectile(world, barrelPos, motion, user, stack);
 
         if(applyHeat(stack)) {
             // Overheated
@@ -299,7 +303,7 @@ public class GunItem extends ProjectileWeaponItem implements CustomArmPoseItem {
         return slotChanged || newStack.getItem() != oldStack.getItem();
     }
 
-    public InteractionResult onLeftClick(Player player, ItemStack stack, InteractionHand hand) {
-        return InteractionResult.PASS;
+    public boolean hasZoom() {
+        return false;
     }
 }

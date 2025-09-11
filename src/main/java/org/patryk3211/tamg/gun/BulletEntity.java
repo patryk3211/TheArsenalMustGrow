@@ -54,7 +54,13 @@ public class BulletEntity extends Projectile {
         entity.reapplyPosition();
         entity.damage = source.configF(CGuns.GunProperties.DAMAGE);
         entity.knockback = source.configF(CGuns.GunProperties.KNOCKBACK);
+        entity.getPersistentData().putInt("TTL", 20 * 5);
         return entity;
+    }
+
+    public BulletEntity withTTL(int ttl) {
+        getPersistentData().putInt("TTL", ttl);
+        return this;
     }
 
     @Override
@@ -68,6 +74,12 @@ public class BulletEntity extends Projectile {
 
     @Override
     public void tick() {
+        var ttl = getPersistentData().getInt("TTL");
+        if(ttl-- <= 0) {
+            discard();
+            return;
+        }
+        getPersistentData().putInt("TTL", ttl);
         super.tick();
         var hit = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
         if(hit.getType() != HitResult.Type.MISS) {
@@ -81,7 +93,9 @@ public class BulletEntity extends Projectile {
         var z = this.getZ() + velocity.z;
         ProjectileUtil.rotateTowardsMovement(this, 1.0f);
 
-        setDeltaMovement(getDeltaMovement().add(0, -0.05, 0));
+        if(!isNoGravity()) {
+            setDeltaMovement(getDeltaMovement().add(0, -0.05, 0));
+        }
         setPos(x, y, z);
     }
 

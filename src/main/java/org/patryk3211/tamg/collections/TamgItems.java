@@ -19,6 +19,7 @@ import org.patryk3211.tamg.gun.pistol.PistolItemRenderer;
 import org.patryk3211.tamg.gun.revolver.RevolverAnimationData;
 import org.patryk3211.tamg.gun.revolver.RevolverItemRenderer;
 import org.patryk3211.tamg.gun.sniper.SniperRifleItem;
+import org.patryk3211.tamg.gun.sniper.SniperRifleItemRenderer;
 
 import static org.patryk3211.tamg.Tamg.REGISTRATE;
 import static org.patryk3211.tamg.gun.GunProperties.*;
@@ -81,7 +82,7 @@ public class TamgItems {
             .transform(setFlashOffset(0, -3.5, -21))
             .transform(setShootVectors(0.375, -0.2, 1.25, -0.025, 0.0125, 0))
             .transform(withAnimationData(() -> EmptyAnimationData::new))
-            .transform(withRenderer(() -> SimpleGunItemRenderer::new))
+            .transform(withRenderer(() -> SniperRifleItemRenderer::new))
             .model(gunBaseModel())
             .register();
 

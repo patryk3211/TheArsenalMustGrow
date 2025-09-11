@@ -1,5 +1,6 @@
 package org.patryk3211.tamg;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionResult;
 import net.minecraftforge.api.distmarker.Dist;
@@ -11,18 +12,20 @@ import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
+import org.lwjgl.glfw.GLFW;
 import org.patryk3211.tamg.collections.TamgPartialModels;
 import org.patryk3211.tamg.collections.TamgParticles;
 import org.patryk3211.tamg.collections.TamgRenderTypes;
 import org.patryk3211.tamg.gun.GunItem;
 import org.patryk3211.tamg.gun.GunRenderHandler;
+import org.patryk3211.tamg.gun.ZoomC2SPacket;
 import org.patryk3211.tamg.gun.sniper.SniperOverlay;
 import org.patryk3211.tamg.gun.sniper.SniperRifleItem;
 
 @OnlyIn(Dist.CLIENT)
 public class TamgClient {
     public static final GunRenderHandler GUN_RENDER_HANDLER = new GunRenderHandler();
-    private static int leftUseCooldown = 0;
+    private static int leftUseTicks = 0;
 
     public static void init() {
         TamgPartialModels.load();
@@ -32,28 +35,32 @@ public class TamgClient {
         Tamg.modEventBus.addListener(TamgClient::particleManagerRegistration);
         Tamg.modEventBus.addListener(TamgClient::overlayRegistration);
         MinecraftForge.EVENT_BUS.addListener(TamgClient::clientTick);
-        MinecraftForge.EVENT_BUS.addListener(TamgClient::clientInput);
+        MinecraftForge.EVENT_BUS.addListener(TamgClient::mouseButton);
         MinecraftForge.EVENT_BUS.addListener(TamgClient::fovModifier);
     }
 
     public static void clientTick(TickEvent.ClientTickEvent event) {
         if(event.phase == TickEvent.Phase.END) {
             GUN_RENDER_HANDLER.tick();
-            if(leftUseCooldown > 0)
-                --leftUseCooldown;
+            var player = Minecraft.getInstance().player;
+            if(player != null && SniperRifleItem.isZooming(player)) {
+                if(!Minecraft.getInstance().options.keyAttack.isDown()) {
+                    Networking.getChannel().sendToServer(new ZoomC2SPacket(false));
+                }
+            }
         }
     }
 
-    public static void clientInput(InputEvent.InteractionKeyMappingTriggered event) {
+    public static void mouseButton(InputEvent.MouseButton.Pre event) {
         var player = Minecraft.getInstance().player;
-        var stack = player.getItemInHand(event.getHand());
-        if(event.isAttack() && stack.getItem() instanceof GunItem gun && leftUseCooldown == 0) {
-            InteractionResult result = gun.onLeftClick(player, stack, event.getHand());
-            if(result.consumesAction()) {
-                leftUseCooldown = 10;
+        if(player == null)
+            return;
+        var stack = player.getMainHandItem();
+        if(stack.getItem() instanceof GunItem gun) {
+            if(gun.hasZoom() && event.getAction() == InputConstants.PRESS
+                && Minecraft.getInstance().options.keyAttack.matchesMouse(event.getButton())) {
+                Networking.getChannel().sendToServer(new ZoomC2SPacket(true));
             }
-            event.setCanceled(result.consumesAction());
-            event.setSwingHand(result.shouldSwing());
         }
     }
 
