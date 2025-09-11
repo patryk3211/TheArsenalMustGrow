@@ -3,12 +3,10 @@ package org.patryk3211.tamg.data;
 import com.drmangotea.tfmg.registry.TFMGFluids;
 import com.drmangotea.tfmg.registry.TFMGItems;
 import com.simibubi.create.AllItems;
-import com.simibubi.create.api.data.recipe.FillingRecipeGen;
 import com.simibubi.create.api.data.recipe.SequencedAssemblyRecipeGen;
 import com.simibubi.create.content.fluids.transfer.FillingRecipe;
 import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
 import com.simibubi.create.content.kinetics.press.PressingRecipe;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Items;
 import org.patryk3211.tamg.Tamg;
@@ -62,6 +60,25 @@ public class SequencedAssemblyRecipes extends SequencedAssemblyRecipeGen {
             .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.steelMechanism()))
             .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.steelMechanism()))
             .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.carbonFibre()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.screws()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.screwDriver()).toolNotConsumed())
+            .addStep(FillingRecipe::new, rb -> rb.require(TFMGFluids.LUBRICATION_OIL.get(), 250))
+    ),
+
+    SNIPER_RIFLE = create("sniper_rifle", b -> b
+            .require(AllItems.POTATO_CANNON)
+            .addOutput(TamgItems.SNIPER_RIFLE, 100)
+            .addOutput(TFMGItems.STEEL_INGOT, 5)
+            .addOutput(TFMGItems.SCREW, 3)
+            .addOutput(TFMGItems.STEEL_MECHANISM, 2)
+            .transitionTo(TamgItems.INCOMPLETE_SNIPER_RIFLE)
+            .loops(1)
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.steelPipe()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.steelPipe()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.steelMechanism()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.precisionMechanism()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.carbonFibre()))
+            .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.spyglass()))
             .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.screws()))
             .addStep(DeployerApplicationRecipe::new, rb -> rb.require(R.screwDriver()).toolNotConsumed())
             .addStep(FillingRecipe::new, rb -> rb.require(TFMGFluids.LUBRICATION_OIL.get(), 250))

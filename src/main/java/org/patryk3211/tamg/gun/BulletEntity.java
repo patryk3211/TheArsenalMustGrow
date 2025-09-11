@@ -19,10 +19,14 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
@@ -38,6 +42,8 @@ import org.patryk3211.tamg.collections.TamgSoundEvents;
 import org.patryk3211.tamg.config.CGuns;
 
 public class BulletEntity extends Projectile {
+    private static final EntityDataAccessor<Byte> FLAGS = SynchedEntityData.defineId(BulletEntity.class, EntityDataSerializers.BYTE);
+
     private float damage;
     private float knockback;
 
@@ -63,9 +69,17 @@ public class BulletEntity extends Projectile {
         return this;
     }
 
+    public void small() {
+        entityData.set(FLAGS, (byte) (entityData.get(FLAGS) | 1));
+    }
+
     @Override
     protected void defineSynchedData() {
+        entityData.define(FLAGS, (byte) 0);
+    }
 
+    public boolean isSmall() {
+        return (entityData.get(FLAGS) & 1) != 0;
     }
 
     public static void playLaunchSound(Level world, Vec3 location, float pitch) {
@@ -74,12 +88,14 @@ public class BulletEntity extends Projectile {
 
     @Override
     public void tick() {
-        var ttl = getPersistentData().getInt("TTL");
-        if(ttl-- <= 0) {
-            discard();
-            return;
+        if(!level().isClientSide) {
+            var ttl = getPersistentData().getInt("TTL");
+            if (ttl-- <= 0) {
+                discard();
+                return;
+            }
+            getPersistentData().putInt("TTL", ttl);
         }
-        getPersistentData().putInt("TTL", ttl);
         super.tick();
         var hit = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
         if(hit.getType() != HitResult.Type.MISS) {

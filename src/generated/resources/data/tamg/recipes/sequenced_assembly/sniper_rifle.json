@@ -1,0 +1,177 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create:potato_cannon"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "chance": 100.0,
+      "item": "tamg:sniper_rifle"
+    },
+    {
+      "chance": 5.0,
+      "item": "tfmg:steel_ingot"
+    },
+    {
+      "chance": 3.0,
+      "item": "tfmg:screw"
+    },
+    {
+      "chance": 2.0,
+      "item": "tfmg:steel_mechanism"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        },
+        {
+          "item": "tfmg:industrial_pipe"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        },
+        {
+          "item": "tfmg:industrial_pipe"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        },
+        {
+          "item": "tfmg:steel_mechanism"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        },
+        {
+          "item": "create:precision_mechanism"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        },
+        {
+          "item": "tamg:carbon_fibre"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        },
+        {
+          "item": "minecraft:spyglass"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        },
+        {
+          "item": "tfmg:screw"
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        },
+        {
+          "item": "tfmg:screwdriver"
+        }
+      ],
+      "keepHeldItem": true,
+      "results": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        }
+      ]
+    },
+    {
+      "type": "create:filling",
+      "ingredients": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        },
+        {
+          "amount": 250,
+          "fluid": "tfmg:lubrication_oil",
+          "nbt": {}
+        }
+      ],
+      "results": [
+        {
+          "item": "tamg:incomplete_sniper_rifle"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "tamg:incomplete_sniper_rifle"
+  }
+}

@@ -1,9 +1,9 @@
 package org.patryk3211.tamg.data;
 
+import com.drmangotea.tfmg.registry.TFMGBlocks;
 import com.drmangotea.tfmg.registry.TFMGItems;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllTags;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -70,5 +70,13 @@ class R {
 
     public static ItemLike heavyPlate() {
         return TFMGItems.HEAVY_PLATE;
+    }
+
+    public static ItemLike steelPipe() {
+        return TFMGBlocks.INDUSTRIAL_PIPE;
+    }
+
+    public static ItemLike spyglass() {
+        return Items.SPYGLASS;
     }
 }

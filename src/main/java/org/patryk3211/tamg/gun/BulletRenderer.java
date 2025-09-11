@@ -52,6 +52,8 @@ public class BulletRenderer extends EntityRenderer<BulletEntity> {
 
         stack.rotateYDegrees(-yaw);
         stack.rotateXDegrees(-entity.getViewXRot(tickDelta));
+        if(entity.isSmall())
+            stack.scale(0.5f);
 
         final float UNIT = 1 / 16f;
         final float HALF_UNIT = UNIT / 2f;

@@ -18,6 +18,7 @@ import org.patryk3211.tamg.gun.pistol.PistolAnimationData;
 import org.patryk3211.tamg.gun.pistol.PistolItemRenderer;
 import org.patryk3211.tamg.gun.revolver.RevolverAnimationData;
 import org.patryk3211.tamg.gun.revolver.RevolverItemRenderer;
+import org.patryk3211.tamg.gun.shotgun.ShotgunItem;
 import org.patryk3211.tamg.gun.sniper.SniperRifleItem;
 import org.patryk3211.tamg.gun.sniper.SniperRifleItemRenderer;
 
@@ -42,6 +43,7 @@ public class TamgItems {
                     TamgItemTags.SNIPER_RIFLE_BULLETS.tag,
                     AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
             SHOTGUN_SLUG = ingredient("shotgun_slug",
+                    TamgItemTags.SHOTGUN_BULLETS.tag,
                     AllTags.AllItemTags.UPRIGHT_ON_BELT.tag);
 
     public static final ItemEntry<Item> CARBON_FIBRE = ingredient("carbon_fibre");
@@ -86,10 +88,21 @@ public class TamgItems {
             .model(gunBaseModel())
             .register();
 
+    public static final ItemEntry<ShotgunItem> SHOTGUN = REGISTRATE.item("shotgun", ShotgunItem::new)
+            .transform(CGuns.base(2, 0.1, 1.0, 0.5, 0.025, 0.0, 10))
+            .transform(setBulletTag(TamgItemTags.SHOTGUN_BULLETS.tag))
+            .transform(setFlashOffset(0, -1.5, -14))
+            .transform(setShootVectors(0.375, -0.2, 1.25, -0.025, 0.0125, 0))
+            .transform(withAnimationData(() -> EmptyAnimationData::new))
+            .transform(withRenderer(() -> SimpleGunItemRenderer::new))
+            .model(gunBaseModel())
+            .register();
+
     public static final ItemEntry<SequencedAssemblyItem>
             INCOMPLETE_PISTOL = sequencedGun(PISTOL),
             INCOMPLETE_REVOLVER = sequencedGun(REVOLVER),
             INCOMPLETE_ASSAULT_RIFLE = sequencedGunCustomModel(ASSAULT_RIFLE),
+            INCOMPLETE_SNIPER_RIFLE = sequencedGunCustomModel(SNIPER_RIFLE),
             INCOMPLETE_SMALL_BULLET = sequenced(SMALL_BULLET, AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
             INCOMPLETE_MEDIUM_BULLET = sequenced(MEDIUM_BULLET, AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
             INCOMPLETE_HEAVY_BULLET = sequenced(HEAVY_BULLET, AllTags.AllItemTags.UPRIGHT_ON_BELT.tag),
